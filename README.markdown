@@ -1,8 +1,7 @@
 
 # Email server
 
-Add an email address for use in your [IRMA app](https://github
-.com/credentials/irma_android_cardemu).
+Add an email address for use in your [IRMA app](https://github.com/credentials/irma_android_cardemu).
 
 
 ## Setting up the server
