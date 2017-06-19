@@ -1,3 +1,8 @@
 {
-  "hello": "Hello world!"
+  "hello": "Hello world!",
+  "mail_host": "smtp.science.ru.nl",
+  "mail_port": 25,
+  "mail_user": "",
+  "mail_password": "",
+  "mail_from_address": "irma@privacybydesign.foundation"
 }

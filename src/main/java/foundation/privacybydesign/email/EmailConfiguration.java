@@ -14,6 +14,11 @@ public class EmailConfiguration {
     static final String CONFIG_FILENAME = "config.json";
 
     String hello = "";
+    String mail_host = "";
+    int mail_port = 25;
+    String mail_user = "";
+    String mail_password = "";
+    String mail_from_address = "";
 
     public static EmailConfiguration getInstance() {
         if (instance == null) {
@@ -60,4 +65,14 @@ public class EmailConfiguration {
     public String getHello() {
         return hello;
     }
+
+    public String getMailHost() { return mail_host; }
+
+    public int getMailPort() { return mail_port; }
+
+    public String getMailUser() { return mail_user; }
+
+    public String getMailPassword() { return mail_password; }
+
+    public String getMailFrom() { return mail_from_address; }
 }
