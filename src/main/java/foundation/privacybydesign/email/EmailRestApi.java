@@ -12,6 +12,6 @@ public class EmailRestApi {
     @Path("/hello")
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return "Hello world!";
+        return EmailConfiguration.getInstance().getHello();
     }
 }
