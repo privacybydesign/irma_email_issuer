@@ -52,6 +52,15 @@ function addEmail(e) {
 
 function verifyEmail(token) {
     console.log('verify:', token);
+    $.post(API_ENDPOINT + 'verify-email-token', {token: token})
+        .done(function(text) {
+            // TODO: show QR code etc.
+            console.log('success: ', text);
+        })
+        .fail(function(e) {
+            // TODO: show error
+            console.log('fail:', e.responseText);
+        })
     setStatus('info', MESSAGES['verifying-email-token']);
 }
 

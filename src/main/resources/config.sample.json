@@ -6,5 +6,12 @@
   "mail_password": "",
   "mail_from_address": "irma@privacybydesign.foundation",
   "secret_key": "",
-  "token_validity": 900
+  "token_validity": 900,
+  "private_key_path": "sk.der",
+  "server_name": "irma_email_provider",
+  "human_readable_name": "Privacy by Design Foundation",
+  "scheme_manager": "pbdf",
+  "email_issuer": "pbdf",
+  "email_credential": "email",
+  "email_attribute": "pbdf.pbdf.email"
 }

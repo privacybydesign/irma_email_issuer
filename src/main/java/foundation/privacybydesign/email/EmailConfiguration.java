@@ -1,10 +1,17 @@
 package foundation.privacybydesign.email;
 
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.irmacard.api.common.util.GsonUtil;
 
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.KeyFactory;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 
 /**
  * Created by ayke on 19-6-17.
@@ -21,6 +28,15 @@ public class EmailConfiguration {
     private String mail_from_address = "";
     private String secret_key = "";
     private long token_validity = 0;
+    private String private_key_path = "";
+    private String server_name = "";
+    private String human_readable_name = "";
+    private String scheme_manager = "";
+    private String email_issuer = "";
+    private String email_credential = "";
+    private String email_attribute = "";
+
+    private PrivateKey privateKey = null;
 
     public static EmailConfiguration getInstance() {
         if (instance == null) {
@@ -64,6 +80,35 @@ public class EmailConfiguration {
         return os.toByteArray();
     }
 
+    public PrivateKey getPrivateKey() throws KeyManagementException {
+        if (privateKey == null) {
+            privateKey = loadPrivateKey(private_key_path);
+        }
+        return privateKey;
+    }
+
+
+    private PrivateKey loadPrivateKey(String filename) throws KeyManagementException {
+        try {
+            return decodePrivateKey(EmailConfiguration.getResource(filename));
+        } catch (IOException e) {
+            throw new KeyManagementException(e);
+        }
+    }
+
+    private PrivateKey decodePrivateKey(byte[] rawKey) throws KeyManagementException {
+        try {
+            if (rawKey == null || rawKey.length == 0)
+                throw new KeyManagementException("Could not read private key");
+
+            PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(rawKey);
+            return KeyFactory.getInstance("RSA").generatePrivate(spec);
+        } catch (NoSuchAlgorithmException |InvalidKeySpecException e) {
+            throw new KeyManagementException(e);
+        }
+    }
+
+
     public String getWebclientUrl() { return web_client_url; }
 
     public String getMailHost() { return mail_host; }
@@ -79,4 +124,18 @@ public class EmailConfiguration {
     public String getSecretKey() { return secret_key; }
 
     public long getEmailTokenValidity() { return token_validity; }
+
+    public String getServerName() { return server_name; }
+
+    public String getHumanReadableName() { return human_readable_name; }
+
+    public String getSchemeManager() { return scheme_manager; }
+
+    public String getEmailIssuer() { return email_issuer; }
+
+    public String getEmailCredential() { return email_credential; }
+
+    public String getEmailAttribute() { return email_attribute; }
+
+    public SignatureAlgorithm getJwtAlgorithm() { return SignatureAlgorithm.RS256; }
 }
