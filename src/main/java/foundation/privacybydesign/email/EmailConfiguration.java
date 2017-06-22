@@ -13,12 +13,15 @@ public class EmailConfiguration {
     static EmailConfiguration instance;
     static final String CONFIG_FILENAME = "config.json";
 
-    String hello = "";
-    String mail_host = "";
-    int mail_port = 25;
-    String mail_user = "";
-    String mail_password = "";
-    String mail_from_address = "";
+    private String hello = "";
+    private String web_client_url = "";
+    private String mail_host = "";
+    private int mail_port = 25;
+    private String mail_user = "";
+    private String mail_password = "";
+    private String mail_from_address = "";
+    private String secret_key = "";
+    private long token_validity = 0;
 
     public static EmailConfiguration getInstance() {
         if (instance == null) {
@@ -66,6 +69,8 @@ public class EmailConfiguration {
         return hello;
     }
 
+    public String getWebclientUrl() { return web_client_url; }
+
     public String getMailHost() { return mail_host; }
 
     public int getMailPort() { return mail_port; }
@@ -75,4 +80,8 @@ public class EmailConfiguration {
     public String getMailPassword() { return mail_password; }
 
     public String getMailFrom() { return mail_from_address; }
+
+    public String getSecretKey() { return secret_key; }
+
+    public long getEmailTokenValidity() { return token_validity; }
 }
