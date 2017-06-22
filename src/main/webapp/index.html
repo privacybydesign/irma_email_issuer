@@ -3,15 +3,15 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		<title>BIG register</title>
+		<title>Email toevoegen</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<meta value="http://10.129.133.64:8080/irma_email_provider/server/" name="irma-web-server">
 		<meta value="https://privacybydesign.foundation/tomcat/irma_api_server/api/v2/" name="irma-api-server">
 
 		<link rel="stylesheet" href="https://privacybydesign.foundation/tomcat/irma_api_server/bower_components/bootstrap/dist/css/bootstrap.min.css"/>
 		<script src="https://privacybydesign.foundation/tomcat/irma_api_server/bower_components/jquery/dist/jquery.js" defer></script>
-		<script src="http://10.129.133.64:8080/bigregister/client/irma.js" defer></script>
 		<script src="common.js" defer></script>
+		<script src="http://10.129.133.64:8080/irma_email_provider/client/irma.js" defer></script>
 	</head>
 	<body>
 		<div class="container">
@@ -19,7 +19,9 @@
 				<div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
                     <h1>E-mail credentials</h1>
 
-					<div id="window-add-email">
+					<div id="status" class="alert hidden" role="alert"></div>
+
+					<div id="window-email-add" class="hidden">
                         <p>Hier kunt u een e-mail adres toevoegen aan uw
 							IRMA app.</p>
                         <!-- disable submit inline, so it is disabled while the
@@ -36,7 +38,8 @@
                         </form>
 					</div>
 
-					<div id="window-email-verify">
+					<div id="window-email-verify" class="hidden">
+						<p>[TODO verificate tekst]</p>
 					</div>
 				</div>
 			</div>

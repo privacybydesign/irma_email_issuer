@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
  */
 @Path("")
 public class EmailRestApi {
-    private static final String EMAIL_ADDRESS_MALFORMED = "error:email-address-malformed";
+    private static final String ERR_ADDRESS_MALFORMED = "error:email-address-malformed";
     private static final String OK_RESPONSE = "OK"; // value doesn't really matter
 
     @GET
@@ -38,7 +38,7 @@ public class EmailRestApi {
             EmailSender.send(emailAddress, "mail verification", mailBody);
         } catch (AddressException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity
-                    (EMAIL_ADDRESS_MALFORMED).build();
+                    (ERR_ADDRESS_MALFORMED).build();
         }
         return Response.status(Response.Status.OK).entity
                 (OK_RESPONSE).build();
