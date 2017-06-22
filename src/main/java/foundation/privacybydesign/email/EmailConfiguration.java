@@ -13,7 +13,6 @@ public class EmailConfiguration {
     static EmailConfiguration instance;
     static final String CONFIG_FILENAME = "config.json";
 
-    private String hello = "";
     private String web_client_url = "";
     private String mail_host = "";
     private int mail_port = 25;
@@ -63,10 +62,6 @@ public class EmailConfiguration {
         os.flush();
         os.close();
         return os.toByteArray();
-    }
-
-    public String getHello() {
-        return hello;
     }
 
     public String getWebclientUrl() { return web_client_url; }

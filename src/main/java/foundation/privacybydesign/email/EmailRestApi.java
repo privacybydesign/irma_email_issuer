@@ -13,13 +13,6 @@ public class EmailRestApi {
     private static final String ERR_ADDRESS_MALFORMED = "error:email-address-malformed";
     private static final String OK_RESPONSE = "OK"; // value doesn't really matter
 
-    @GET
-    @Path("/hello")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return EmailConfiguration.getInstance().getHello();
-    }
-
     @POST
     @Path("/send-email-token")
     @Produces(MediaType.TEXT_PLAIN)
