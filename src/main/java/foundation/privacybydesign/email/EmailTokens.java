@@ -96,7 +96,7 @@ public class EmailTokens {
     // Compare two byte arrays in constant time. I haven't been able to
     // quickly find a Java API for this (which would be a much better idea
     // than reinventing the wheel).
-    private boolean isEqualsConstantTime(char[] a, char[] b) {
+    private static boolean isEqualsConstantTime(char[] a, char[] b) {
         // I hope this is safe...
         // https://codahale.com/a-lesson-in-timing-attacks/
         // https://golang.org/src/crypto/subtle/constant_time.go (ConstantTimeCompare)
