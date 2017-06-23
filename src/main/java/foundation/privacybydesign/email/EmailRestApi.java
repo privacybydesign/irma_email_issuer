@@ -42,12 +42,11 @@ public class EmailRestApi {
         // Test email with signature
         String token = signer.createToken(conf.getMailFrom());
 
-        String mailBody = "Add an email address by clicking the following " +
-                "link:\n\n  " + conf.getWebclientUrl() + "#verify-email/" +
-                token;
+        String url = conf.getWebclientUrl() + "#verify-email/" + token;
+        String mailBody = conf.getVerifyEmailBody() + "\n\n" + url;
 
         try {
-            EmailSender.send(emailAddress, "mail verification", mailBody);
+            EmailSender.send(emailAddress, conf.getVerifyEmailSubject(), mailBody);
         } catch (AddressException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity
                     (ERR_ADDRESS_MALFORMED).build();

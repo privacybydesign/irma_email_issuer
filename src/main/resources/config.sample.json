@@ -1,5 +1,7 @@
 {
   "web_client_url": "http://localhost:8080/irma_email_provider/",
+  "verify_email_subject": "Voeg e-mail adres toe aan IRMA",
+  "verify_email_body": "Klik op onderstaande link om een e-mail adres toe te voegen aan IRMA:",
   "mail_host": "smtp.science.ru.nl",
   "mail_port": 25,
   "mail_user": "",

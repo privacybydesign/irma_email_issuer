@@ -21,6 +21,8 @@ public class EmailConfiguration {
     static final String CONFIG_FILENAME = "config.json";
 
     private String web_client_url = "";
+    private String verify_email_subject = "";
+    private String verify_email_body = "";
     private String mail_host = "";
     private int mail_port = 25;
     private String mail_user = "";
@@ -110,6 +112,10 @@ public class EmailConfiguration {
 
 
     public String getWebclientUrl() { return web_client_url; }
+
+    public String getVerifyEmailSubject() { return verify_email_subject; }
+
+    public String getVerifyEmailBody() { return verify_email_body; }
 
     public String getMailHost() { return mail_host; }
 
