@@ -6,8 +6,14 @@ var MESSAGES = {
     'error:email-address-malformed': 'E-mailadres is onjuist',
     'sending-verification-email': 'Verificatie e-mail wordt verzonden aan %address%…',
     'sent-verification-email': 'Verificatiemail is verzonden aan %address%. Controleer uw inbox voor een verificatie e-mail. Het kan een paar minuten duren voordat de e-mail arriveert.',
-    'verifying-email-token': 'E-mail verifiëren...',
+    'verifying-email-token': 'E-mail adres wordt geverifieerd...',
     'unknown-problem': 'Onbekend probleem: ',
+    'error:invalid-token': 'Link in de e-mail is verouderd of ongeldig',
+    'email-failed-to-verify': 'Onbekend probleem tijdens het verifiëren van het e-mail adres',
+    'email-add-verified': 'E-mail adres geverifieerd',
+    'email-add-success': 'E-mail adres toegevoegd',
+    'email-add-cancel': 'Geannuleerd',
+    'email-add-error': 'Het is helaas niet gelukt dit e-mail adres toe te voegen aan de IRMA app',
 };
 
 function init() {
@@ -51,15 +57,33 @@ function addEmail(e) {
 }
 
 function verifyEmail(token) {
-    console.log('verify:', token);
+    console.log('verify token:', token);
     $.post(API_ENDPOINT + 'verify-email-token', {token: token})
-        .done(function(text) {
-            // TODO: show QR code etc.
-            console.log('success: ', text);
+        .done(function(jwt) {
+            setStatus('info', MESSAGES['email-add-verified'])
+            console.log('success: ', jwt);
+            IRMA.issue(jwt, function(e) {
+                setStatus('success', MESSAGES['email-add-success'])
+                console.log('email issued:', e);
+            }, function(e) {
+                setStatus('info', MESSAGES['email-add-cancel'])
+                console.warn('cancelled:', e);
+            }, function(e) {
+                setStatus('danger', MESSAGES['email-add-error'])
+                console.error('error:', e);
+            })
         })
         .fail(function(e) {
-            // TODO: show error
-            console.log('fail:', e.responseText);
+            console.error('email token not accepted:', e.responseText);
+            var errormsg = e.responseText;
+            if (errormsg.substr(0, 6) === 'error:' && errormsg in MESSAGES) {
+                // Probably the token didn't verify.
+                setStatus('danger', MESSAGES[errormsg])
+            } else {
+                // Problem outside the API (e.g. misconfiguration, network
+                // error, etc.)
+                setStatus('danger', MESSAGES['email-failed-to-verify'])
+            }
         })
     setStatus('info', MESSAGES['verifying-email-token']);
 }

@@ -9,9 +9,10 @@
         <meta value="https://privacybydesign.foundation/tomcat/irma_api_server/api/v2/" name="irma-api-server">
 
         <link rel="stylesheet" href="https://privacybydesign.foundation/tomcat/irma_api_server/bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+
         <script src="https://privacybydesign.foundation/tomcat/irma_api_server/bower_components/jquery/dist/jquery.js" defer></script>
+        <script src="https://privacybydesign.foundation/tomcat/irma_api_server/client/irma.js" defer></script>
         <script src="common.js" defer></script>
-        <script src="http://10.129.133.64:8080/irma_email_provider/client/irma.js" defer></script>
     </head>
     <body>
         <div class="container">
@@ -39,7 +40,8 @@
                     </div>
 
                     <div id="window-email-verify" class="hidden">
-                        <p>[TODO verificate tekst]</p>
+                        <!-- Maybe we should put here some explanation of
+                        what's going on behind the scenes -->
                     </div>
                 </div>
             </div>
