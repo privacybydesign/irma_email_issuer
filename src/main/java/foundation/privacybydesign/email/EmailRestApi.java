@@ -40,7 +40,7 @@ public class EmailRestApi {
         EmailConfiguration conf = EmailConfiguration.getInstance();
 
         // Test email with signature
-        String token = signer.createToken(conf.getMailFrom());
+        String token = signer.createToken(emailAddress);
 
         String url = conf.getWebclientUrl() + "#verify-email/" + token;
         String mailBody = conf.getVerifyEmailBody() + "\n\n" + url;
