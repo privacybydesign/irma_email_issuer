@@ -1,6 +1,6 @@
 'use strict';
 
-var API_ENDPOINT = '/irma_email_provider/api/';
+var API_ENDPOINT = '/tomcat/irma_email_provider/api/';
 
 var MESSAGES = {
     'error:email-address-malformed': 'E-mailadres is onjuist',
