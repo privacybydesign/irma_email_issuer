@@ -1,5 +1,6 @@
 package foundation.privacybydesign.email;
 
+import foundation.privacybydesign.email.filters.RateLimit;
 import org.irmacard.api.common.ApiClient;
 import org.irmacard.api.common.CredentialRequest;
 import org.irmacard.api.common.issuing.IdentityProviderRequest;
@@ -34,9 +35,8 @@ public class EmailRestApi {
     @POST
     @Path("/send-email-token")
     @Produces(MediaType.TEXT_PLAIN)
+    @RateLimit
     public Response sendEmailToken(@FormParam("email") String emailAddress) {
-        // TODO rate-limit this method
-
         EmailConfiguration conf = EmailConfiguration.getInstance();
 
         // Test email with signature
