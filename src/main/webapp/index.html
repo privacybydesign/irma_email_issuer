@@ -23,14 +23,20 @@
                     <div id="status" class="alert hidden" role="alert"></div>
 
                     <div id="window-email-add" class="hidden">
-                        <p>Hier kunt u een e-mail adres toevoegen aan uw
-                            IRMA app.</p>
+                        <p>Hier kunt u een e-mailadres als attribuut toevoegen aan uw
+                            IRMA app. Dit werkt als volgt:</p>
+                        <ol>
+                            <li>Vul uw e-mailadres hieronder in, en klik op de knop 'Voeg toe'.</li>
+                            <li>Naar het e-mailadres wat u opgeeft wordt een e-mail met een
+                                verificatie-link gestuurt. Klik op deze link.</li>
+                            <li>Scan de QR-code die verschijnt met uw IRMA-app.</li>
+                        </ol>
                         <!-- disable submit inline, so it is disabled while the
                              page is loading -->
                         <form id="email-form" onsubmit="javascript:return false;">
                             <div class="input-group">
                                 <input type="email" required class="form-control"
-                                       placeholder="you@email-provider.com"/>
+                                       placeholder="email@adres.nl"/>
                                 <span class="input-group-btn">
                                     <input type="submit" class="btn btn-primary"
                                            value="Voeg toe"/>
