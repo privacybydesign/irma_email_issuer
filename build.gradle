@@ -1,7 +1,7 @@
 group 'foundation.privacybydesign.email'
-version '0.1'
+version '1.0'
 
-apply plugin: 'java'
+apply plugin: 'war'
 apply plugin: 'org.akhikhl.gretty'
 
 sourceCompatibility = 1.7
