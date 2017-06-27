@@ -1,5 +1,8 @@
 package foundation.privacybydesign.email;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.crypto.Mac;
 import javax.xml.bind.DatatypeConverter;
 import java.security.InvalidKeyException;
@@ -10,6 +13,7 @@ import javax.crypto.spec.SecretKeySpec;
  * Created by ayke on 22-6-17.
  */
 public class EmailTokens {
+    private static Logger logger = LoggerFactory.getLogger(EmailTokens.class);
     private static String SIGNING_ALGORITHM = "HmacSHA256";
 
     private Mac mac;
@@ -62,6 +66,7 @@ public class EmailTokens {
         String[] parts = token.split(":");
         if (parts.length != 3) {
             // invalid syntax
+            logger.error("Token {} does not have 3 parts", token);
             return null;
         }
         String value = parts[0];
@@ -73,6 +78,7 @@ public class EmailTokens {
             creationTime = Long.parseLong(timestamp);
         } catch (NumberFormatException e) {
             // Invalid syntax
+            logger.error("Token {} has non-integer creation time", token);
             return null;
         }
 
@@ -80,6 +86,7 @@ public class EmailTokens {
         long currentTime = System.currentTimeMillis() / 1000;
         if (currentTime > creationTime+tokenValidity) {
             // Token is no longer valid.
+            logger.error("Token {} has expired", token);
             return null;
         }
 
@@ -89,6 +96,7 @@ public class EmailTokens {
                 calculatedDigestText.toCharArray())) {
             return value;
         } else {
+            logger.error("Token {} has invalid HMAC", token);
             return null;
         }
     }

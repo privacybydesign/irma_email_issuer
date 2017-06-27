@@ -6,9 +6,14 @@ import org.irmacard.api.common.CredentialRequest;
 import org.irmacard.api.common.issuing.IdentityProviderRequest;
 import org.irmacard.api.common.issuing.IssuingRequest;
 import org.irmacard.credentials.info.CredentialIdentifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.mail.internet.AddressException;
-import javax.ws.rs.*;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.security.KeyManagementException;
@@ -21,6 +26,8 @@ import java.util.HashMap;
  */
 @Path("")
 public class EmailRestApi {
+    private static Logger logger = LoggerFactory.getLogger(EmailRestApi.class);
+
     private static final String ERR_ADDRESS_MALFORMED = "error:email-address-malformed";
     private static final String ERR_INVALID_TOKEN = "error:invalid-token";
     private static final String OK_RESPONSE = "OK"; // value doesn't really matter
@@ -46,8 +53,10 @@ public class EmailRestApi {
         String mailBody = conf.getVerifyEmailBody() + "\n\n" + url;
 
         try {
+            logger.info("Sending verification email to {}", emailAddress);
             EmailSender.send(emailAddress, conf.getVerifyEmailSubject(), mailBody);
         } catch (AddressException e) {
+            logger.error("Invalid address: {}: {}", emailAddress, e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity
                     (ERR_ADDRESS_MALFORMED).build();
         }
@@ -68,6 +77,8 @@ public class EmailRestApi {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(ERR_INVALID_TOKEN).build();
         }
+
+        logger.info("Token {} successfully verified, issuing credential", token);
 
         // Mostly copied from https://github.com/credentials/irma_keyshare_server/blob/master/src/main/java/org/irmacard/keyshare/web/WebClientResource.java
         ArrayList<CredentialRequest> credentials = new ArrayList<>(1);
