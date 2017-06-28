@@ -7,7 +7,7 @@ var MESSAGES = {
     'sending-verification-email': 'Verificatie e-mail wordt verzonden aan %address%…',
     'sent-verification-email': 'Verificatiemail is verzonden aan %address%. Controleer uw inbox voor een verificatie e-mail. Het kan een paar minuten duren voordat de e-mail arriveert.',
     'verifying-email-token': 'E-mail adres wordt geverifieerd...',
-    'unknown-problem': 'Onbekend probleem: ',
+    'unknown-problem': 'Onbekend probleem',
     'error:invalid-token': 'Link in de e-mail is verouderd of ongeldig',
     'email-failed-to-verify': 'Onbekend probleem tijdens het verifiëren van het e-mail adres',
     'email-add-verified': 'E-mail adres geverifieerd',
@@ -51,7 +51,7 @@ function addEmail(e) {
         })
         .fail(function(e) {
             // Address format problem?
-            setStatus('danger', MESSAGES[e.responseText] || MESSAGES['unknown-problem'] + e.responseText);
+            setStatus('danger', MESSAGES[e.responseText] || MESSAGES['unknown-problem']);
             console.error('fail', e.responseText);
         });
 }
