@@ -1,22 +1,15 @@
 package foundation.privacybydesign.email;
 
+import foundation.privacybydesign.api.server.BaseConfiguration;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.irmacard.api.common.util.GsonUtil;
 
-import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
-import java.security.KeyFactory;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
+import java.io.IOException;
 
 /**
  * Created by ayke on 19-6-17.
  */
-public class EmailConfiguration {
+public class EmailConfiguration extends BaseConfiguration {
     static EmailConfiguration instance;
     static final String CONFIG_FILENAME = "config.json";
 
@@ -30,15 +23,12 @@ public class EmailConfiguration {
     private String mail_from_address = "";
     private String secret_key = "";
     private long token_validity = 0;
-    private String private_key_path = "";
     private String server_name = "";
     private String human_readable_name = "";
     private String scheme_manager = "";
     private String email_issuer = "";
     private String email_credential = "";
     private String email_attribute = "";
-
-    private PrivateKey privateKey = null;
 
     public static EmailConfiguration getInstance() {
         if (instance == null) {
@@ -56,60 +46,6 @@ public class EmailConfiguration {
             instance = new EmailConfiguration();
         }
     }
-
-    public static byte[] getResource(String filename) throws IOException {
-        URL url = EmailConfiguration.class.getClassLoader().getResource(filename);
-        if (url == null)
-            throw new IOException("Could not load file " + filename);
-
-        URLConnection urlCon = url.openConnection();
-        urlCon.setUseCaches(false);
-        return convertSteamToByteArray(urlCon.getInputStream(), 2048);
-    }
-
-    public static byte[] convertSteamToByteArray(InputStream stream, int size) throws IOException {
-        byte[] buffer = new byte[size];
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-
-        int line;
-        while ((line = stream.read(buffer)) != -1) {
-            os.write(buffer, 0, line);
-        }
-        stream.close();
-
-        os.flush();
-        os.close();
-        return os.toByteArray();
-    }
-
-    public PrivateKey getPrivateKey() throws KeyManagementException {
-        if (privateKey == null) {
-            privateKey = loadPrivateKey(private_key_path);
-        }
-        return privateKey;
-    }
-
-
-    private PrivateKey loadPrivateKey(String filename) throws KeyManagementException {
-        try {
-            return decodePrivateKey(EmailConfiguration.getResource(filename));
-        } catch (IOException e) {
-            throw new KeyManagementException(e);
-        }
-    }
-
-    private PrivateKey decodePrivateKey(byte[] rawKey) throws KeyManagementException {
-        try {
-            if (rawKey == null || rawKey.length == 0)
-                throw new KeyManagementException("Could not read private key");
-
-            PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(rawKey);
-            return KeyFactory.getInstance("RSA").generatePrivate(spec);
-        } catch (NoSuchAlgorithmException |InvalidKeySpecException e) {
-            throw new KeyManagementException(e);
-        }
-    }
-
 
     public String getWebclientUrl() { return web_client_url; }
 
