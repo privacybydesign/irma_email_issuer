@@ -6,10 +6,6 @@ apply plugin: 'org.akhikhl.gretty'
 
 sourceCompatibility = 1.7
 
-repositories {
-    mavenCentral()
-}
-
 buildscript {
     repositories {
         maven {
@@ -22,6 +18,7 @@ buildscript {
 }
 
 repositories {
+    mavenLocal()
     maven {
         url "https://credentials.github.io/repos/maven2/"
     }
@@ -35,6 +32,7 @@ dependencies {
     compile 'com.sun.mail:javax.mail:1.5.6'
 
     compile 'org.irmacard.api:irma_api_common:0.7.7'
+    compile 'foundation.privacybydesign.api.server.email:irma_server_common:0.1'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
