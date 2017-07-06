@@ -1,6 +1,6 @@
 package foundation.privacybydesign.email;
 
-import foundation.privacybydesign.api.server.BaseConfiguration;
+import foundation.privacybydesign.common.BaseConfiguration;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.irmacard.api.common.util.GsonUtil;
 

@@ -1,6 +1,6 @@
 package foundation.privacybydesign.email;
 
-import foundation.privacybydesign.api.server.email.EmailTokens;
+import foundation.privacybydesign.common.email.EmailTokens;
 
 import javax.mail.internet.AddressException;
 

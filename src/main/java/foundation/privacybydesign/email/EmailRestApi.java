@@ -1,7 +1,7 @@
 package foundation.privacybydesign.email;
 
-import foundation.privacybydesign.api.server.email.EmailTokens;
-import foundation.privacybydesign.api.server.filters.RateLimit;
+import foundation.privacybydesign.common.email.EmailTokens;
+import foundation.privacybydesign.common.filters.RateLimit;
 import org.irmacard.api.common.ApiClient;
 import org.irmacard.api.common.CredentialRequest;
 import org.irmacard.api.common.issuing.IdentityProviderRequest;
