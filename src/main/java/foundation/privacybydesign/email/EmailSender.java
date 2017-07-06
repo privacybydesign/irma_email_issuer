@@ -10,11 +10,24 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 
-// TODO: join this with org.irmacard.keyshare.web.email.EmailSender
 
+/**
+ * Simple class to send emails. Mail host/port/auth is configured in
+ * EmailConfiguration.
+ *
+ * TODO: join this with org.irmacard.keyshare.web.email.EmailSender
+ */
 public class EmailSender {
     private static Logger logger = LoggerFactory.getLogger(EmailSender.class);
 
+    /**
+     * Send an email using a configured SMTP server.
+     *
+     * @param toAddresses Email 'To' address - where to send the mail to
+     * @param subject Email subject
+     * @param body Email text body
+     * @throws AddressException
+     */
     public static void send(String toAddresses, String subject, String body) throws AddressException {
         InternetAddress[] addresses = InternetAddress.parse(toAddresses);
         if (addresses.length != 1)

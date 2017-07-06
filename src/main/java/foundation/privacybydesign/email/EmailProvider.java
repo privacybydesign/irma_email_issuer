@@ -5,7 +5,8 @@ import foundation.privacybydesign.common.email.EmailTokens;
 import javax.mail.internet.AddressException;
 
 /**
- * Created by ayke on 19-6-17.
+ * Test console application. Quite useless now, but was useful while writing
+ * this application.
  */
 public class EmailProvider {
     public static void main(String[] args) throws AddressException {

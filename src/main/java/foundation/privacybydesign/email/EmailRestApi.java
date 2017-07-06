@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 /**
- * Created by ayke on 19-6-17.
+ * REST API for use by the web client.
  */
 @Path("")
 public class EmailRestApi {
@@ -40,6 +40,13 @@ public class EmailRestApi {
         signer = new EmailTokens(conf.getSecretKey(), conf.getEmailTokenValidity());
     }
 
+    /**
+     * Send an email with a token for verification. Send back whether it
+     * succeeded.
+     *
+     * @param emailAddress the user address to send to
+     * @return 200 OK for success or an error if it fails
+     */
     @POST
     @Path("/send-email-token")
     @Produces(MediaType.TEXT_PLAIN)
@@ -65,6 +72,14 @@ public class EmailRestApi {
                 (OK_RESPONSE).build();
     }
 
+    /**
+     * Verify an email token and if it verifies, return an issuing JWT with
+     * the email address.
+     *
+     * @param token the token as sent in the email to the user for verification
+     * @return either 200 OK with the JWT, or a HTTP error with an error string.
+     * @throws KeyManagementException
+     */
     @POST
     @Path("/verify-email-token")
     @Produces(MediaType.TEXT_PLAIN)
