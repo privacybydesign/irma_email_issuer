@@ -13,6 +13,7 @@ var MESSAGES = {
     'email-add-verified': 'E-mail adres geverifieerd',
     'email-add-success': 'E-mail adres toegevoegd',
     'email-add-cancel': 'Geannuleerd',
+    'email-add-timeout': 'Sessie verlopen. Herlaad de pagina om het opnieuw te proberen.',
     'email-add-error': 'Het is helaas niet gelukt dit e-mail adres toe te voegen aan de IRMA app',
 };
 
@@ -66,8 +67,13 @@ function verifyEmail(token) {
                 setStatus('success', MESSAGES['email-add-success'])
                 console.log('email issued:', e);
             }, function(e) {
-                setStatus('info', MESSAGES['email-add-cancel'])
                 console.warn('cancelled:', e);
+                // TODO: don't interpret these strings, use error codes instead.
+                if (e === 'Session timeout, please try again') {
+                    setStatus('info', MESSAGES['email-add-timeout'])
+                } else { // e === 'User cancelled authentication'
+                    setStatus('info', MESSAGES['email-add-cancel'])
+                }
             }, function(e) {
                 setStatus('danger', MESSAGES['email-add-error'])
                 console.error('error:', e);
