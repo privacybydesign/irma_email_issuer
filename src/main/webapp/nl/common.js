@@ -5,7 +5,7 @@ var API_ENDPOINT = '/tomcat/irma_email_issuer/api/';
 var MESSAGES = {
     'error:email-address-malformed': 'E-mailadres is onjuist',
     'sending-verification-email': 'Een verificatie e-mail wordt verzonden aan %address%…',
-    'sent-verification-email': 'De verificatiemail is verzonden aan %address%. Controleer uw inbox voor een verificatie e-mail. Het kan een paar minuten duren voordat de e-mail arriveert.',
+    'sent-verification-email': 'De verificatiemail is verzonden aan %address%. Controleer uw inbox voor een verificatie e-mail. Het kan een paar minuten duren voordat de e-mail arriveert. (Controleer zonodig ook uw spam folder.)',
     'verifying-email-token': 'Het e-mail adres wordt geverifieerd...',
     'unknown-problem': 'Onbekend probleem',
     'error:invalid-token': 'De link in de e-mail is verouderd of ongeldig',
