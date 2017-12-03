@@ -11,10 +11,11 @@ var MESSAGES = {
     'error:invalid-token': 'De link in de e-mail is verouderd of ongeldig',
     'email-failed-to-verify': 'Onbekend probleem tijdens het verifiëren van het e-mail adres',
     'email-add-verified': 'Het e-mail adres geverifieerd',
-    'email-add-success': 'Het e-mail adres toegevoegd',
+    'email-add-success': 'Het e-mail adres is toegevoegd',
     'email-add-cancel': 'Geannuleerd',
     'email-add-timeout': 'De sessie is verlopen. Herlaad de pagina om het eventueel opnieuw te proberen.',
     'email-add-error': 'Het is helaas niet gelukt dit e-mail adres toe te voegen aan de IRMA app.',
+    'return-to-issue-page': '<br><br><a href=\"https://privacybydesign.foundation/uitgifte/\">Terug</a> naar attribuut uitgifte.',
 };
 
 function init() {
@@ -64,18 +65,18 @@ function verifyEmail(token) {
             setStatus('info', MESSAGES['email-add-verified'])
             console.log('success: ', jwt);
             IRMA.issue(jwt, function(e) {
-                setStatus('success', MESSAGES['email-add-success'])
+                setStatus('success', MESSAGES['email-add-success'] + MESSAGES['return-to-issue-page'])
                 console.log('email issued:', e);
             }, function(e) {
                 console.warn('cancelled:', e);
                 // TODO: don't interpret these strings, use error codes instead.
                 if (e === 'Session timeout, please try again') {
-                    setStatus('info', MESSAGES['email-add-timeout'])
+                    setStatus('info', MESSAGES['email-add-timeout'] + MESSAGES['return-to-issue-page'])
                 } else { // e === 'User cancelled authentication'
-                    setStatus('info', MESSAGES['email-add-cancel'])
+                    setStatus('info', MESSAGES['email-add-cancel'] + MESSAGES['return-to-issue-page'])
                 }
             }, function(e) {
-                setStatus('danger', MESSAGES['email-add-error'])
+                setStatus('danger', MESSAGES['email-add-error'] + MESSAGES['return-to-issue-page'])
                 console.error('error:', e);
             })
         })
@@ -101,7 +102,7 @@ function setStatus(alertType, message) {
         .removeClass('alert-warning')
         .removeClass('alert-danger')
         .addClass('alert-'+alertType)
-        .text(message)
+        .html(message)
         .removeClass('hidden');
 }
 

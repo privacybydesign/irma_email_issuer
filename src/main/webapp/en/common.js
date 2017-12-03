@@ -15,6 +15,7 @@ var MESSAGES = {
     'email-add-cancel': 'Cancelled',
     'email-add-timeout': 'Sessie time out. Reload this page in order to try again.',
     'email-add-error': 'Unfortunately, adding this e-mail address to the IRMA app did not succeed.',
+    'return-to-issue-page': '<br><br><a href=\"https://privacybydesign.foundation/issuance/\">Return</a> to attribute issuance.',
 };
 
 function init() {
@@ -64,18 +65,18 @@ function verifyEmail(token) {
             setStatus('info', MESSAGES['email-add-verified'])
             console.log('success: ', jwt);
             IRMA.issue(jwt, function(e) {
-                setStatus('success', MESSAGES['email-add-success'])
+                setStatus('success', MESSAGES['email-add-success'] + MESSAGES['return-to-issue-page'])
                 console.log('email issued:', e);
             }, function(e) {
                 console.warn('cancelled:', e);
                 // TODO: don't interpret these strings, use error codes instead.
                 if (e === 'Session timeout, please try again') {
-                    setStatus('info', MESSAGES['email-add-timeout'])
+                    setStatus('info', MESSAGES['email-add-timeout'] + MESSAGES['return-to-issue-page'])
                 } else { // e === 'User cancelled authentication'
                     setStatus('info', MESSAGES['email-add-cancel'])
                 }
             }, function(e) {
-                setStatus('danger', MESSAGES['email-add-error'])
+                setStatus('danger', MESSAGES['email-add-error'] + MESSAGES['return-to-issue-page'])
                 console.error('error:', e);
             })
         })
