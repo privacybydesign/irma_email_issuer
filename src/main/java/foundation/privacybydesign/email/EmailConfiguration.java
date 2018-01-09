@@ -5,6 +5,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.irmacard.api.common.util.GsonUtil;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Created by ayke on 19-6-17.
@@ -13,9 +14,8 @@ public class EmailConfiguration extends BaseConfiguration {
     static EmailConfiguration instance;
     static final String CONFIG_FILENAME = "config.json";
 
-    private String web_client_url = "";
-    private String verify_email_subject = "";
-    private String verify_email_body = "";
+    private Map<String, String> verify_email_subject = null;
+    private Map<String, String> verify_email_body = null;
     private String mail_host = "";
     private int mail_port = 25;
     private String mail_user = "";
@@ -47,11 +47,9 @@ public class EmailConfiguration extends BaseConfiguration {
         }
     }
 
-    public String getWebclientUrl() { return web_client_url; }
+    public String getVerifyEmailSubject(String language) { return verify_email_subject.get(language); }
 
-    public String getVerifyEmailSubject() { return verify_email_subject; }
-
-    public String getVerifyEmailBody() { return verify_email_body; }
+    public String getVerifyEmailBody(String language) { return verify_email_body.get(language); }
 
     public String getMailHost() { return mail_host; }
 
