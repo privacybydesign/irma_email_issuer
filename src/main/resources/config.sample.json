@@ -1,7 +1,12 @@
 {
-  "web_client_url": "http://localhost:8080/irma_email_issuer/",
-  "verify_email_subject": "Voeg e-mail adres toe aan IRMA",
-  "verify_email_body": "Klik op onderstaande link om een e-mail adres toe te voegen aan IRMA:",
+  "verify_email_subject": {
+    "en": "Add e-mail adres to IRMA",
+    "nl": "Voeg e-mail adres toe aan IRMA"
+  },
+  "verify_email_body": {
+    "en": "Click the following link to add an e-mail attribute to IRMA:\n\nhttps://privacybydesign.foundation/issuance/email/%s",
+    "nl": "Klik op onderstaande link om uw e-mail adres toe te voegen aan uw IRMA app:\n\nhttps://privacybydesign.foundation/uitgifte/email/%s"
+  },
   "mail_host": "smtp.science.ru.nl",
   "mail_port": 25,
   "mail_user": "",

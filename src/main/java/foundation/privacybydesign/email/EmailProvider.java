@@ -16,9 +16,8 @@ public class EmailProvider {
         EmailTokens signer = new EmailTokens(conf.getSecretKey(), conf.getEmailTokenValidity());
         String token = signer.createToken(conf.getMailFrom());
 
-        String mailBody = "Add an email address by clicking the following " +
-                "link:\n\n  " + conf.getWebclientUrl() + "#verify-email/" +
-                token;
+        String mailBody = String.format(conf.getVerifyEmailBody("en"),
+                "#verify-email/" + token);
 
         System.out.println("Sending test email...");
         EmailSender.send(conf.getMailFrom(), "mail verification", mailBody);

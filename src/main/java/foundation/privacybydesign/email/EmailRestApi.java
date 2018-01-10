@@ -31,6 +31,7 @@ public class EmailRestApi {
 
     private static final String ERR_ADDRESS_MALFORMED = "error:email-address-malformed";
     private static final String ERR_INVALID_TOKEN = "error:invalid-token";
+    private static final String ERR_INVALID_LANG = "error:invalid-language";
     private static final String OK_RESPONSE = "OK"; // value doesn't really matter
 
     private EmailTokens signer;
@@ -51,18 +52,25 @@ public class EmailRestApi {
     @Path("/send-email-token")
     @Produces(MediaType.TEXT_PLAIN)
     @RateLimit
-    public Response sendEmailToken(@FormParam("email") String emailAddress) {
+    public Response sendEmailToken(@FormParam("email") String emailAddress,
+                                   @FormParam("language") String language) {
         EmailConfiguration conf = EmailConfiguration.getInstance();
 
         // Test email with signature
         String token = signer.createToken(emailAddress);
 
-        String url = conf.getWebclientUrl() + "#verify-email/" + token;
-        String mailBody = conf.getVerifyEmailBody() + "\n\n" + url;
+        String mailBodyTemplate = conf.getVerifyEmailBody(language);
+        if (mailBodyTemplate == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity
+                    (ERR_INVALID_LANG).build();
+        }
+        String mailBody = String.format(mailBodyTemplate,
+                "#verify-email/" + token);
 
         try {
             logger.info("Sending verification email to {}", emailAddress);
-            EmailSender.send(emailAddress, conf.getVerifyEmailSubject(), mailBody);
+            EmailSender.send(emailAddress, conf.getVerifyEmailSubject(language),
+                    mailBody);
         } catch (AddressException e) {
             logger.error("Invalid address: {}: {}", emailAddress, e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity
