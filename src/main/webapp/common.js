@@ -20,7 +20,7 @@ function init() {
 }
 
 function setWindow(window) {
-    $('[id^=window-').addClass('hidden');
+    $('[id^=window-]').addClass('hidden');
     $('#window-'+window).removeClass('hidden');
 }
 
