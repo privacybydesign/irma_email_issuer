@@ -5,10 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 import javax.mail.*;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
+import javax.mail.internet.*;
 
 
 /**
@@ -29,6 +26,10 @@ public class EmailSender {
      * @throws AddressException
      */
     public static void send(String toAddresses, String subject, String body) throws AddressException {
+        send(toAddresses, subject, body, null, false);
+    }
+
+    public static void send(String toAddresses, String subject, String body, String replyto, boolean html, Object... o) throws AddressException{
         InternetAddress[] addresses = InternetAddress.parse(toAddresses);
         if (addresses.length != 1)
             throw new AddressException("Invalid amount of (comma-separated) addresses given (should be 1)");
@@ -61,7 +62,21 @@ public class EmailSender {
             message.setFrom(new InternetAddress(EmailConfiguration.getInstance().getMailFrom()));
             message.setRecipients(Message.RecipientType.TO, addresses);
             message.setSubject(subject);
-            message.setText(body);
+            if (replyto != null && replyto.length() > 0)
+                message.setReplyTo(new Address[]{new InternetAddress(replyto)});
+
+            if (o != null && o.length > 0)
+                body = String.format(body, o);
+
+            if (html) {
+                MimeBodyPart messageBodyPart = new MimeBodyPart();
+                messageBodyPart.setContent(body, "text/html");
+                Multipart multipart = new MimeMultipart();
+                multipart.addBodyPart(messageBodyPart);
+                message.setContent(multipart);
+            } else {
+                message.setText(body);
+            }
             Transport.send(message);
             logger.info("Sent mail to {}", toAddresses);
         } catch (MessagingException e) {
