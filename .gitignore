@@ -3,3 +3,13 @@ build/
 src/main/resources/config.json
 *.der
 *.pem
+node_modules
+webapp/config.js
+webapp/build
+.classpath
+.project
+.settings/
+bin/
+
+!src/main/webapp/WEB-INF
+src/main/webapp/*
