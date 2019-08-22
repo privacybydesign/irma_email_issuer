@@ -1,7 +1,5 @@
 'use strict';
 
-var API_ENDPOINT = '/tomcat/irma_email_issuer/api/';
-
 function init() {
     $('#email-form').on('submit', addEmail);
 
@@ -28,7 +26,7 @@ function addEmail(e) {
     var address = $('#email-form [type=email]').val();
     setStatus('info', MESSAGES['sending-verification-email'].replace('%address%', address));
     $('#email-form input').prop('disabled', true);
-    $.post(API_ENDPOINT + 'send-email-token', {email: address, language: MESSAGES['lang']})
+    $.post(config.EMAILSERVER + '/send-email-token', {email: address, language: MESSAGES['lang']})
         .done(function(e) {
             // Mail was sent - but we don't know whether it'll be received
             // (e.g. address may not exist).
@@ -44,25 +42,29 @@ function addEmail(e) {
 
 function verifyEmail(token) {
     console.log('verify token:', token);
-    $.post(API_ENDPOINT + 'verify-email-token', {token: token})
+    $.post(config.EMAILSERVER + '/verify-email-token', {token: token})
         .done(function(jwt) {
             setStatus('info', MESSAGES['email-add-verified'])
             console.log('success: ', jwt);
-            IRMA.issue(jwt, function(e) {
-                setStatus('success', MESSAGES['email-add-success'] + MESSAGES['return-to-issue-page'])
-                console.log('email issued:', e);
-            }, function(e) {
-                console.warn('cancelled:', e);
-                // TODO: don't interpret these strings, use error codes instead.
-                if (e === 'Session timeout, please try again') {
-                    setStatus('info', MESSAGES['email-add-timeout'] + MESSAGES['return-to-issue-page'])
-                } else { // e === 'User cancelled authentication'
-                    setStatus('info', MESSAGES['email-add-cancel'] + MESSAGES['return-to-issue-page'])
-                }
-            }, function(e) {
-                setStatus('danger', MESSAGES['email-add-error'] + MESSAGES['return-to-issue-page'])
-                console.error('error:', e);
-            })
+
+            irma.startSession(config.IRMASERVER, jwt, 'publickey')
+                .then(function(pkg) {
+                    console.log('session started');
+                    return irma.handleSession(pkg.sessionPtr,
+                        {method: 'popup', language: 'en'}
+                    );
+                })
+                .then(function() {
+                    console.log('session done');
+                    setStatus('success', MESSAGES['email-add-success'] + MESSAGES['return-to-issue-page']);
+                })
+                .catch(function(err) {
+                    console.error('error:', err);
+                    if (err === irma.SessionStatus.Cancelled)
+                        setStatus('info', MESSAGES['email-add-cancel'] + MESSAGES['return-to-issue-page']);
+                    else
+                        setStatus('danger', MESSAGES['email-add-error'] + MESSAGES['return-to-issue-page']);
+                });
         })
         .fail(function(e) {
             console.error('email token not accepted:', e.responseText);
