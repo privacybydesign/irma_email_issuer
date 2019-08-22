@@ -10,7 +10,7 @@ function init() {
     if (key === 'verify-email') {
         // When clicking a verification link
         setWindow('email-verify');
-        verifyEmail(parts[1]);
+        verifyEmail(parts[1], parts[2]);
     } else {
         // Default window
         setWindow('email-add');
@@ -40,8 +40,8 @@ function addEmail(e) {
         });
 }
 
-function verifyEmail(token) {
-    console.log('verify token:', token);
+function verifyEmail(token, url) {
+    console.log('verify token:', token, url);
     $.post(config.EMAILSERVER + '/verify-email-token', {token: token})
         .done(function(jwt) {
             setStatus('info', MESSAGES['email-add-verified'])
@@ -51,12 +51,16 @@ function verifyEmail(token) {
                 .then(function(pkg) {
                     console.log('session started');
                     return irma.handleSession(pkg.sessionPtr,
-                        {method: 'popup', language: 'en'}
+                        {method: 'popup', language: config.LANGUAGE}
                     );
                 })
                 .then(function() {
                     console.log('session done');
-                    setStatus('success', MESSAGES['email-add-success'] + MESSAGES['return-to-issue-page']);
+                    if (url) {
+                        window.location.replace(decodeURIComponent(url));
+                        setStatus('success', MESSAGES['email-add-success']);
+                    } else
+                        setStatus('success', MESSAGES['email-add-success'] + MESSAGES['return-to-issue-page']);
                 })
                 .catch(function(err) {
                     console.error('error:', err);
@@ -77,7 +81,7 @@ function verifyEmail(token) {
                 // error, etc.)
                 setStatus('danger', MESSAGES['email-failed-to-verify'])
             }
-        })
+        });
     setStatus('info', MESSAGES['verifying-email-token']);
 }
 

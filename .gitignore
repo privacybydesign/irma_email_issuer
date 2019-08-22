@@ -1,6 +1,7 @@
 build/
 .gradle/
 src/main/resources/config.json
+src/main/resources/*.html
 *.der
 *.pem
 node_modules

@@ -11,12 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.mail.internet.AddressException;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,6 +39,40 @@ public class EmailRestApi {
     public EmailRestApi() {
         EmailConfiguration conf = EmailConfiguration.getInstance();
         signer = new EmailTokens(conf.getSecretKey(), conf.getEmailTokenValidity());
+    }
+
+    @POST
+    @Path("/send-email")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response sendEmail(@FormParam("email") String email,
+                              @FormParam("language") String lang,
+                              @HeaderParam("Authorization") String auth) {
+        EmailConfiguration conf = EmailConfiguration.getInstance();
+        Client client = conf.getClient(auth);
+        if (client == null)
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+
+        if (lang == null || lang.length() == 0)
+            lang = EmailConfiguration.getInstance().getDefaultLanguage();
+        String token = signer.createToken(email);
+        try {
+            logger.info("Sending verification email for {} to {}", client.getName(), email);
+            EmailSender.send(
+                    email,
+                    client.getEmailSubject(lang),
+                    client.getEmail(lang),
+                    client.getReplyToEmail(),
+                    true,
+                    "#verify-email/" + token + "/" + URLEncoder.encode(client.getReturnURL(), StandardCharsets.UTF_8.toString())
+            );
+        } catch (AddressException e) {
+            logger.error("Invalid address: {}: {}", email, e.getMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(ERR_ADDRESS_MALFORMED).build();
+        } catch (UnsupportedEncodingException e) {
+            logger.error("Invalid return URL: {}: {}", client.getReturnURL(), e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+        return Response.status(Response.Status.OK).entity(OK_RESPONSE).build();
     }
 
     /**
@@ -64,13 +98,17 @@ public class EmailRestApi {
             return Response.status(Response.Status.BAD_REQUEST).entity
                     (ERR_INVALID_LANG).build();
         }
-        String mailBody = String.format(mailBodyTemplate,
-                "#verify-email/" + token);
 
         try {
             logger.info("Sending verification email to {}", emailAddress);
-            EmailSender.send(emailAddress, conf.getVerifyEmailSubject(language),
-                    mailBody);
+            EmailSender.send(
+                    emailAddress,
+                    conf.getVerifyEmailSubject(language),
+                    mailBodyTemplate,
+                    null,
+                    false,
+                    "#verify-email/" + token
+            );
         } catch (AddressException e) {
             logger.error("Invalid address: {}: {}", emailAddress, e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity

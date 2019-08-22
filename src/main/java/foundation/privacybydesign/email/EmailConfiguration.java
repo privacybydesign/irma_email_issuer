@@ -5,6 +5,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.irmacard.api.common.util.GsonUtil;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -29,6 +30,10 @@ public class EmailConfiguration extends BaseConfiguration {
     private String email_issuer = "";
     private String email_credential = "";
     private String email_attribute = "";
+
+    private String defaultLanguage = "nl";
+
+    private HashMap<String, Client> clients = null;
 
     public static EmailConfiguration getInstance() {
         if (instance == null) {
@@ -78,4 +83,12 @@ public class EmailConfiguration extends BaseConfiguration {
     public String getEmailAttribute() { return email_attribute; }
 
     public SignatureAlgorithm getJwtAlgorithm() { return SignatureAlgorithm.RS256; }
+
+    public Client getClient(String token) {
+        return clients.get(token);
+    }
+
+    public String getDefaultLanguage() {
+        return defaultLanguage;
+    }
 }
