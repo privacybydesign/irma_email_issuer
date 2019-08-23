@@ -51,7 +51,7 @@ function verifyEmail(token, url) {
                 .then(function(pkg) {
                     console.log('session started');
                     return irma.handleSession(pkg.sessionPtr,
-                        {method: 'popup', language: config.LANGUAGE}
+                        {method: 'popup', language: language}
                     );
                 })
                 .then(function() {
