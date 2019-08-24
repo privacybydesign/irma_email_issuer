@@ -42,47 +42,51 @@ function addEmail(e) {
 
 function verifyEmail(token, url) {
     console.log('verify token:', token, url);
-    $.post(config.EMAILSERVER + '/verify-email-token', {token: token})
-        .done(function(jwt) {
-            setStatus('info', MESSAGES['email-add-verified'])
-            console.log('success: ', jwt);
-
-            irma.startSession(config.IRMASERVER, jwt, 'publickey')
-                .then(function(pkg) {
-                    console.log('session started');
-                    return irma.handleSession(pkg.sessionPtr,
-                        {method: 'popup', language: language}
-                    );
-                })
-                .then(function() {
-                    console.log('session done');
-                    if (url) {
-                        window.location.replace(decodeURIComponent(url));
-                        setStatus('success', MESSAGES['email-add-success']);
-                    } else
-                        setStatus('success', MESSAGES['email-add-success'] + MESSAGES['return-to-issue-page']);
-                })
-                .catch(function(err) {
-                    console.error('error:', err);
-                    if (err === irma.SessionStatus.Cancelled)
-                        setStatus('info', MESSAGES['email-add-cancel'] + MESSAGES['return-to-issue-page']);
-                    else
-                        setStatus('danger', MESSAGES['email-add-error'] + MESSAGES['return-to-issue-page']);
-                });
-        })
-        .fail(function(e) {
-            console.error('email token not accepted:', e.responseText);
-            var errormsg = e.responseText;
-            if (errormsg.substr(0, 6) === 'error:' && errormsg in MESSAGES) {
-                // Probably the token didn't verify.
-                setStatus('danger', MESSAGES[errormsg])
-            } else {
-                // Problem outside the API (e.g. misconfiguration, network
-                // error, etc.)
-                setStatus('danger', MESSAGES['email-failed-to-verify'])
-            }
-        });
     setStatus('info', MESSAGES['verifying-email-token']);
+    $.post(config.EMAILSERVER + '/verify-email-token', {token: token})
+        .done(issue)
+        .fail(handleIssuanceError);
+}
+
+function issue(jwt) {
+    setStatus('info', MESSAGES['email-add-verified'])
+    console.log('success: ', jwt);
+
+    irma.startSession(config.IRMASERVER, jwt, 'publickey')
+        .then(function(pkg) {
+            console.log('session started');
+            return irma.handleSession(pkg.sessionPtr,
+                {method: 'popup', language: language}
+            );
+        })
+        .then(function() {
+            console.log('session done');
+            if (url) {
+                window.location.replace(decodeURIComponent(url));
+                setStatus('success', MESSAGES['email-add-success']);
+            } else
+                setStatus('success', MESSAGES['email-add-success'] + MESSAGES['return-to-issue-page']);
+        })
+        .catch(function(err) {
+            console.error('error:', err);
+            if (err === irma.SessionStatus.Cancelled)
+                setStatus('info', MESSAGES['email-add-cancel'] + MESSAGES['return-to-issue-page']);
+            else
+                setStatus('danger', MESSAGES['email-add-error'] + MESSAGES['return-to-issue-page']);
+        });
+}
+
+function handleIssuanceError(e) {
+    console.error('email token not accepted:', e.responseText);
+    var errormsg = e.responseText;
+    if (errormsg.substr(0, 6) === 'error:' && errormsg in MESSAGES) {
+        // Probably the token didn't verify.
+        setStatus('danger', MESSAGES[errormsg])
+    } else {
+        // Problem outside the API (e.g. misconfiguration, network
+        // error, etc.)
+        setStatus('danger', MESSAGES['email-failed-to-verify'])
+    }
 }
 
 function setStatus(alertType, message) {
