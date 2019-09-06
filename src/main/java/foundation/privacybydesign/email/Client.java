@@ -16,7 +16,7 @@ public class Client {
 	private static Logger logger = LoggerFactory.getLogger(Client.class);
 
 	public String getEmailFile(String lang) {
-		return email_files.get(lang);
+		return "clientmails/" + email_files.get(lang);
 	}
 
 	public String getEmail(String lang)  {

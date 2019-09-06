@@ -1,7 +1,7 @@
 build/
 .gradle/
 src/main/resources/config.json
-src/main/resources/*.html
+src/main/resources/clientmails/*
 *.der
 *.pem
 node_modules

@@ -3,20 +3,21 @@ package foundation.privacybydesign.email;
 import foundation.privacybydesign.common.BaseConfiguration;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.irmacard.api.common.util.GsonUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by ayke on 19-6-17.
- */
 public class EmailConfiguration extends BaseConfiguration {
+    private static Logger logger = LoggerFactory.getLogger(Client.class);
+
     static EmailConfiguration instance;
     static final String CONFIG_FILENAME = "config.json";
 
     private Map<String, String> verify_email_subject = null;
-    private Map<String, String> verify_email_body = null;
+    private String server_url;
     private String mail_host = "";
     private int mail_port = 25;
     private String mail_user = "";
@@ -31,7 +32,7 @@ public class EmailConfiguration extends BaseConfiguration {
     private String email_credential = "";
     private String email_attribute = "";
 
-    private String defaultLanguage = "nl";
+    private String default_language = "nl";
 
     private HashMap<String, Client> clients = null;
 
@@ -54,7 +55,14 @@ public class EmailConfiguration extends BaseConfiguration {
 
     public String getVerifyEmailSubject(String language) { return verify_email_subject.get(language); }
 
-    public String getVerifyEmailBody(String language) { return verify_email_body.get(language); }
+    public String getVerifyEmailBody(String language) {
+        try {
+            return new String(EmailConfiguration.getResource("email-" + language + ".html"));
+        } catch (IOException e) {
+            logger.error("Failed to read email file");
+            throw new RuntimeException(e);
+        }
+    }
 
     public String getMailHost() { return mail_host; }
 
@@ -89,6 +97,10 @@ public class EmailConfiguration extends BaseConfiguration {
     }
 
     public String getDefaultLanguage() {
-        return defaultLanguage;
+        return default_language;
+    }
+
+    public String getServerURL() {
+        return server_url;
     }
 }

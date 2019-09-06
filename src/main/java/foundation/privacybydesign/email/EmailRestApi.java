@@ -57,13 +57,15 @@ public class EmailRestApi {
         String token = signer.createToken(email);
         try {
             logger.info("Sending verification email for {} to {}", client.getName(), email);
+            String url = conf.getServerURL() + "#verify-email/" + token
+                    + "/" + URLEncoder.encode(client.getReturnURL(), StandardCharsets.UTF_8.toString());
             EmailSender.send(
                     email,
                     client.getEmailSubject(lang),
                     client.getEmail(lang),
                     client.getReplyToEmail(),
                     true,
-                    "#verify-email/" + token + "/" + URLEncoder.encode(client.getReturnURL(), StandardCharsets.UTF_8.toString())
+                    url
             );
         } catch (AddressException e) {
             logger.error("Invalid address: {}: {}", email, e.getMessage());
@@ -93,6 +95,8 @@ public class EmailRestApi {
         // Test email with signature
         String token = signer.createToken(emailAddress);
 
+        if (language == null || language.length() == 0)
+            language = EmailConfiguration.getInstance().getDefaultLanguage();
         String mailBodyTemplate = conf.getVerifyEmailBody(language);
         if (mailBodyTemplate == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity
@@ -106,8 +110,8 @@ public class EmailRestApi {
                     conf.getVerifyEmailSubject(language),
                     mailBodyTemplate,
                     null,
-                    false,
-                    "#verify-email/" + token
+                    true,
+                    conf.getServerURL() + "#verify-email/" + token
             );
         } catch (AddressException e) {
             logger.error("Invalid address: {}: {}", emailAddress, e.getMessage());
