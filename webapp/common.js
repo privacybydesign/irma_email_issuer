@@ -44,11 +44,11 @@ function verifyEmail(token, url) {
     console.log('verify token:', token, url);
     setStatus('info', MESSAGES['verifying-email-token']);
     $.post(config.EMAILSERVER + '/verify-email-token', {token: token})
-        .done(issue)
+        .done(function(jwt) { issue(jwt, url); })
         .fail(handleIssuanceError);
 }
 
-function issue(jwt) {
+function issue(jwt, url) {
     setStatus('info', MESSAGES['email-add-verified'])
     console.log('success: ', jwt);
 
