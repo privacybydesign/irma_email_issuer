@@ -17,5 +17,6 @@
   "scheme_manager": "pbdf",
   "email_issuer": "pbdf",
   "email_credential": "email",
-  "email_attribute": "email"
+  "email_attribute": "email",
+  "domain_attribute": "domain"
 }

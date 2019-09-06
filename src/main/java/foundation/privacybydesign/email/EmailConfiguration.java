@@ -31,6 +31,7 @@ public class EmailConfiguration extends BaseConfiguration {
     private String email_issuer = "";
     private String email_credential = "";
     private String email_attribute = "";
+    private String domain_attribute = "";
 
     private String default_language = "nl";
 
@@ -89,6 +90,8 @@ public class EmailConfiguration extends BaseConfiguration {
     public String getEmailCredential() { return email_credential; }
 
     public String getEmailAttribute() { return email_attribute; }
+
+    public String getDomainAttribute() { return domain_attribute; }
 
     public SignatureAlgorithm getJwtAlgorithm() { return SignatureAlgorithm.RS256; }
 

@@ -143,6 +143,12 @@ public class EmailRestApi {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(ERR_INVALID_TOKEN).build();
         }
+        String[] emailParts = emailAddress.split("@");
+        if (emailParts.length != 2) {
+            logger.error("Invalid address: {}", emailAddress);
+            return Response.status(Response.Status.BAD_REQUEST).entity
+                    (ERR_ADDRESS_MALFORMED).build();
+        }
 
         logger.info("Token {} successfully verified, issuing credential", token);
 
@@ -150,6 +156,7 @@ public class EmailRestApi {
         ArrayList<CredentialRequest> credentials = new ArrayList<>(1);
         HashMap<String, String> attrs = new HashMap<>(1);
         attrs.put(conf.getEmailAttribute(), emailAddress);
+        attrs.put(conf.getDomainAttribute(), emailParts[1]);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, 1);
         credentials.add(new CredentialRequest((int)CredentialRequest
