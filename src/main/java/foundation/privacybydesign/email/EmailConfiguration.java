@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.PrivateKey;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +17,10 @@ public class EmailConfiguration extends BaseConfiguration {
 
     static EmailConfiguration instance;
     static final String CONFIG_FILENAME = "config.json";
+    
+    static {
+    	BaseConfiguration.confDirName = "irma_email_issuer";
+    }
 
     private Map<String, String> verify_email_subject = null;
     private String server_url;
@@ -63,6 +69,10 @@ public class EmailConfiguration extends BaseConfiguration {
             logger.error("Failed to read email file");
             throw new RuntimeException(e);
         }
+    }
+    
+    public PrivateKey getPrivateKey() throws KeyManagementException {
+        return BaseConfiguration.getPrivateKey("sk.der");
     }
 
     public String getMailHost() { return mail_host; }
