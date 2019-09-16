@@ -39,7 +39,7 @@ public class EmailSender {
         // For that, only mail.smtp.starttls.required has to be set:
         // https://github.com/javaee/javamail/blob/master/mail/src/main/java/com/sun/mail/smtp/SMTPTransport.java#L734
         //props.put("mail.smtp.starttls.enabled", "true");
-        props.put("mail.smtp.starttls.required", "true");
+        props.put("mail.smtp.starttls.required", EmailConfiguration.getInstance().getStarttlsRequired());
         props.put("mail.smtp.host", EmailConfiguration.getInstance().getMailHost());
         props.put("mail.smtp.port", EmailConfiguration.getInstance().getMailPort());
 

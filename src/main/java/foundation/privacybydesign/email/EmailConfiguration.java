@@ -29,6 +29,7 @@ public class EmailConfiguration extends BaseConfiguration {
     private String mail_user = "";
     private String mail_password = "";
     private String mail_from_address = "";
+    private boolean mail_starttls_required = true;
     private String secret_key = "";
     private long token_validity = 0;
     private String server_name = "";
@@ -84,6 +85,8 @@ public class EmailConfiguration extends BaseConfiguration {
     public String getMailPassword() { return mail_password; }
 
     public String getMailFrom() { return mail_from_address; }
+
+    public boolean getStarttlsRequired() { return mail_starttls_required; }
 
     public String getSecretKey() { return secret_key; }
 
