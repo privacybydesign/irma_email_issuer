@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@privacybydesign/irmajs@^0.1.6":
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/@privacybydesign/irmajs/-/irmajs-0.1.6.tgz#05035f3971d3adea9ddf2fc01b43bc97dcd24b98"
-  integrity sha512-0jD7a6FPs68JAQI0u0UhLJXmqTvwrT+vDP9sEnNYHjTkgTjWK4AesNdKEZOSlLX3gnTvBZ5DC7+9PJRQpcfdpw==
+"@privacybydesign/irmajs@^0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@privacybydesign/irmajs/-/irmajs-0.1.8.tgz#ec181d7c0ead827c1740dd9980d08a4107135add"
+  integrity sha512-6mui2ICYPX1S+uygOcZIfzowVJI02uuJcp40TFomIiYfOR9VJQk6H98Gmo+lPFV2gQmTs2/GWVoQf3Zk9RG3Mw==
   dependencies:
     es6-object-assign "^1.1.0"
     es6-promise "^4.2.5"
