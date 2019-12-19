@@ -1,70 +1,62 @@
 <!DOCTYPE html>
-
 <html>
-    <head>
-        <meta charset="utf-8"/>
-        <title>E-mail toevoegen</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+<head>
+  <meta charset="utf-8" />
+  <title>Add E-mail</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/style.css"/>
+  <script src="assets/config.js" defer></script>
+  <script src="assets/jquery.min.js" defer></script>
+  <script src="assets/irma.js" defer></script>
+  <script src="assets/messages.js" defer></script>
+  <script src="assets/common.js" defer></script>
+  <script>
+    var language = 'en';
+  </script>
+</head>
+<body>
+<form id="email-form" onsubmit="javascript:return false;">
+  <header>
+    <h1>Adding an e-mail attribute</h1>
+  </header>
+  <main>
+    <div id="status" class="alert hidden" role="alert"></div>
+    <div id="window-email-add">
+      <p>On this page you can add an e-mail address
+        as a new attribute to your IRMA app. This can
+        be done multiple times. It works via the
+        following three steps.</p>
+      <ol>
+        <li>Fill in your e-mail address below, and
+          click the 'Add address' button.
+        </li>
+        <li>An e-mail message will then be sent to
+          this address with a verification
+          link. Click this link in your e-mail
+          reader.
+        </li>
+        <li>Scan the resulting QR-code with your
+          IRMA-app and follow the instructions in
+          the app.
+        </li>
+      </ol>
 
-        <link rel="stylesheet" href="assets/bootstrap.min.css"/>
-        <script src="assets/config.js" defer></script>
-        <script src="assets/jquery.min.js" defer></script>
-        <script src="assets/irma.js" defer></script>
-        <script src="assets/messages.js" defer></script>
-        <script src="assets/common.js" defer></script>
-        <script>
-            var language = 'en';
-        </script>
-    </head>
-    <body>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
-                    <h1>Adding an e-mail attribute</h1>
-
-                    <div id="status" class="alert hidden" role="alert"></div>
-
-                    <div id="window-email-add" class="hidden">
-                        <p>On this page you can add an e-mail address
-                        as a new attribute to your IRMA app. This can
-                        be done multiple times. It works via the
-                        following three steps.</p>
-                        <ol>
-                            <li>Fill in your e-mail address below, and
-                            click the 'Add address' button.</li>
-                            <li>An e-mail message will then be sent to
-                            this address with a verification
-                            link. Click this link in your e-mail
-                            reader.</li>
-                            <li>Scan the resulting QR-code with your
-                            IRMA-app and follow the instructions in
-                            the app.</li>
-                        </ol>
-                        <!-- disable submit inline, so it is disabled while the
-                             page is loading -->
-                        <form id="email-form" onsubmit="javascript:return false;">
-                            <div class="input-group">
-                                <input type="email" required class="form-control"
-                                       placeholder="email@adres.nl"/>
-                                <span class="input-group-btn">
-                                    <input type="submit" class="btn btn-primary"
-                                           value="Add address"/>
-                                </span>
-                            </div>
-                        </form>
-			<br>
-			<br>
-			<p>
-			<a href="https://privacybydesign.foundation/issuance/">Back</a> to attribute issuance.
-			</p>
-                    </div>
-
-                    <div id="window-email-verify" class="hidden">
-                        <!-- Maybe we should put here some explanation of
-                        what's going on behind the scenes -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
-</html>
+      <label for="email">E-mail address</label>
+      <input type="email" id="email" required class="form-control" placeholder="email@example.com" />
+    </div>
+    <div id="window-email-verify" class="hidden">
+      <!-- Maybe we should put here some explanation of
+      what's going on behind the scenes -->
+    </div>
+  </main>
+  <footer>
+    <div class="actions">
+      <a href="https://privacybydesign.foundation/issuance/">
+        Back
+      </a>
+      <button type="submit">
+        Add address
+      </button>
+    </div>
+  </footer>
+</form>
