@@ -56,7 +56,6 @@ public class EmailRestApi {
             lang = EmailConfiguration.getInstance().getDefaultLanguage();
         String token = signer.createToken(email);
         try {
-            logger.info("Sending verification email for {} to {}", client.getName(), email);
             String url = conf.getServerURL() + "#verify-email/" + token
                     + "/" + URLEncoder.encode(client.getReturnURL(), StandardCharsets.UTF_8.toString());
             EmailSender.send(
@@ -104,7 +103,6 @@ public class EmailRestApi {
         }
 
         try {
-            logger.info("Sending verification email to {}", emailAddress);
             EmailSender.send(
                     emailAddress,
                     conf.getVerifyEmailSubject(language),
@@ -150,7 +148,6 @@ public class EmailRestApi {
                     (ERR_ADDRESS_MALFORMED).build();
         }
 
-        logger.info("Token {} successfully verified, issuing credential", token);
 
         // Mostly copied from https://github.com/credentials/irma_keyshare_server/blob/master/src/main/java/org/irmacard/keyshare/web/WebClientResource.java
         ArrayList<CredentialRequest> credentials = new ArrayList<>(1);
