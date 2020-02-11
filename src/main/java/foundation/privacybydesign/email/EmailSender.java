@@ -78,7 +78,6 @@ public class EmailSender {
                 message.setText(body);
             }
             Transport.send(message);
-            logger.info("Sent mail to {}", toAddresses);
         } catch (MessagingException e) {
             logger.error("Sending mail to {} failed:\n{}", toAddresses, e.getMessage());
         }
