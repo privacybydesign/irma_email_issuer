@@ -17,32 +17,22 @@
 <body>
 <form id="email-form" onsubmit="javascript:return false;">
   <header>
-    <h1>Adding an e-mail attribute</h1>
+    <h1>Adding an e-mail address</h1>
   </header>
   <main>
     <div id="status" class="alert hidden" role="alert"></div>
-    <div id="window-email-add">
+    <div id="window-email-add" class="hidden">
       <p>On this page you can add an e-mail address
-        as a new attribute to your IRMA app. This can
-        be done multiple times. It works via the
-        following three steps.</p>
-      <ol>
-        <li>Fill in your e-mail address below, and
-          click the 'Add address' button.
-        </li>
-        <li>An e-mail message will then be sent to
-          this address with a verification
-          link. Click this link in your e-mail
-          reader.
-        </li>
-        <li>Scan the resulting QR-code with your
-          IRMA-app and follow the instructions in
-          the app.
-        </li>
-      </ol>
-
+        to your IRMA app. If you want to add multiple
+        e-mail addresses to the IRMA app, you have to
+        perform these steps multiple times.</p>
       <label for="email">E-mail address</label>
       <input type="email" id="email" required class="form-control" placeholder="email@example.com" />
+    </div>
+    <div id="window-email-confirm" class="hidden">
+      <p>Fill in the same e-mail address again to confirm it.</p>
+      <label for="email-confirm">Confirm e-mail address</label>
+      <input type="email" id="email-confirm" placeholder="email@example.com"/>
     </div>
     <div id="window-email-verify" class="hidden">
       <!-- Maybe we should put here some explanation of
@@ -51,12 +41,10 @@
   </main>
   <footer>
     <div class="actions">
-      <a href="https://privacybydesign.foundation/issuance/">
+      <a id="back-button" href="https://privacybydesign.foundation/issuance/">
         Back
       </a>
-      <button type="submit">
-        Add address
-      </button>
+      <button id="submit-button" type="submit"></button>
     </div>
   </footer>
 </form>

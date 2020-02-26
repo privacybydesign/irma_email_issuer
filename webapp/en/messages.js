@@ -2,6 +2,7 @@
 var MESSAGES = {
     'lang': 'en',
     'error:email-address-malformed': 'E-mail address is not well-formed',
+    'email-confirm-differs': 'The e-mail addresses you filled in did not match. Please try again.',
     'sending-verification-email': 'A verification e-mail is being sent to %address%…',
     'sent-verification-email': 'The verification mail has been sent to %address%. Check your inbox to open the verification e-mail. It may take a couple of minutes for the e-mail to arrive. (If you do not see it, check your spam folder too.)',
     'verifying-email-token': 'E-mail adres is being verified ...',
@@ -14,4 +15,6 @@ var MESSAGES = {
     'email-add-timeout': 'Sessie time out. Reload this page in order to try again.',
     'email-add-error': 'Unfortunately, adding this e-mail address to the IRMA app did not succeed.',
     'return-to-issue-page': '<br><br><a href=\"https://privacybydesign.foundation/issuance/\">Return</a> to attribute issuance.',
+    'submit-email-add': 'Add address',
+    'submit-email-confirm': 'Confirm',
 };

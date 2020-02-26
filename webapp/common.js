@@ -3,6 +3,9 @@
 function init() {
     $('#email-form').on('submit', addEmail);
 
+    if (location.href.includes('?inapp=true'))
+        $('#back-button').addClass('button-hidden');
+
     // Route to the correct window - e.g. when clicking on a verification link.
     var hash = location.hash.substring(1);
     var parts = hash.split('/');
@@ -20,10 +23,33 @@ function init() {
 function setWindow(window) {
     $('[id^=window-]').addClass('hidden');
     $('#window-'+window).removeClass('hidden');
+
+    const buttonText = MESSAGES['submit-' + window];
+    const button = $('#submit-button');
+    if (buttonText) {
+        button.text(buttonText);
+        button.removeClass('hidden');
+    }
+    else
+        button.addClass('hidden');
 }
 
 function addEmail(e) {
-    var address = $('#email-form [type=email]').val();
+    if ($('#window-email-confirm').hasClass('hidden')) {
+        setWindow('email-confirm');
+        return;
+    }
+
+    const address = $('#email-form [id=email]').val();
+    const addressConfirmed = $('#email-form [id=email-confirm]').val();
+
+    console.log(address, addressConfirmed);
+    if (address !== addressConfirmed) {
+        setStatus('warning', MESSAGES['email-confirm-differs']);
+        setWindow('email-add');
+        return;
+    }
+
     setStatus('info', MESSAGES['sending-verification-email'].replace('%address%', address));
     $('#email-form input').prop('disabled', true);
     $.post(config.EMAILSERVER + '/send-email-token', {email: address, language: MESSAGES['lang']})
