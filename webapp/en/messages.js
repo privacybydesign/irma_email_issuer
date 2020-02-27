@@ -16,4 +16,5 @@ var MESSAGES = {
     'email-add-error': 'Unfortunately, adding this e-mail address to the IRMA app did not succeed.',
     'submit-email-add': 'Add address',
     'submit-email-confirm': 'Confirm',
+    'issuers-overview-page': 'https://privacybydesign.foundation/issuance/',
 };

@@ -26,9 +26,12 @@ function setWindow(window, back) {
     if (back) {
         backButton
           .click(() => {setWindow(back); return false;})
+          .removeAttr('href')
           .removeClass('button-hidden');
-    } else if (location.href.includes('?inapp=true')) {
-        backButton.addClass('button-hidden');
+    } else {
+        backButton.attr('href', MESSAGES['issuers-overview-page']);
+        if (location.href.includes('?inapp=true'))
+            backButton.addClass('button-hidden');
     }
 
     const submitButtonText = MESSAGES['submit-' + window];
