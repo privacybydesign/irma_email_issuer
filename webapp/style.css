@@ -68,6 +68,15 @@ header h1 {
   font-weight: bold;
 }
 
+#email-confirm {
+  max-width: 600px;
+  margin: auto;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
 .hidden {
   display: none;
 }
