@@ -3,9 +3,6 @@
 function init() {
     $('#email-form').on('submit', addEmail);
 
-    if (location.href.includes('?inapp=true'))
-        $('#back-button').addClass('button-hidden');
-
     // Route to the correct window - e.g. when clicking on a verification link.
     var hash = location.hash.substring(1);
     var parts = hash.split('/');
@@ -20,23 +17,33 @@ function init() {
     }
 }
 
-function setWindow(window) {
+function setWindow(window, back) {
     $('[id^=window-]').addClass('hidden');
     $('#window-'+window).removeClass('hidden');
 
-    const buttonText = MESSAGES['submit-' + window];
-    const button = $('#submit-button');
-    if (buttonText) {
-        button.text(buttonText);
-        button.removeClass('hidden');
+    const backButton = $('#back-button');
+    backButton.off();
+    if (back) {
+        backButton
+          .click(() => {setWindow(back); return false;})
+          .removeClass('button-hidden');
+    } else if (location.href.includes('?inapp=true')) {
+        backButton.addClass('button-hidden');
+    }
+
+    const submitButtonText = MESSAGES['submit-' + window];
+    const submitButton = $('#submit-button');
+    if (submitButtonText) {
+        submitButton.text(submitButtonText);
+        submitButton.removeClass('hidden');
     }
     else
-        button.addClass('hidden');
+        submitButton.addClass('hidden');
 }
 
 function addEmail(e) {
     if ($('#window-email-confirm').hasClass('hidden')) {
-        setWindow('email-confirm');
+        setWindow('email-confirm', 'email-add');
         return;
     }
 
@@ -51,17 +58,19 @@ function addEmail(e) {
     }
 
     setStatus('info', MESSAGES['sending-verification-email'].replace('%address%', address));
+    setWindow('email-sent', 'email-add');
     $('#email-form input').prop('disabled', true);
     $.post(config.EMAILSERVER + '/send-email-token', {email: address, language: MESSAGES['lang']})
         .done(function(e) {
             // Mail was sent - but we don't know whether it'll be received
             // (e.g. address may not exist).
             console.log('success', e);
-            setStatus('success', MESSAGES['sent-verification-email'].replace('%address%', address));
+            setStatus('info', MESSAGES['sent-verification-email'].replace('%address%', address));
         })
         .fail(function(e) {
             // Address format problem?
             setStatus('danger', MESSAGES[e.responseText] || MESSAGES['unknown-problem']);
+            setWindow('email-add');
             console.error('fail', e.responseText);
         });
 }
@@ -75,7 +84,7 @@ function verifyEmail(token, url) {
 }
 
 function issue(jwt, url) {
-    setStatus('info', MESSAGES['email-add-verified'])
+    setStatus('info', MESSAGES['email-add-verified']);
     console.log('success: ', jwt);
 
     irma.startSession(config.IRMASERVER, jwt, 'publickey')
@@ -91,14 +100,14 @@ function issue(jwt, url) {
                 window.location.replace(decodeURIComponent(url));
                 setStatus('success', MESSAGES['email-add-success']);
             } else
-                setStatus('success', MESSAGES['email-add-success'] + MESSAGES['return-to-issue-page']);
+                setStatus('success', MESSAGES['email-add-success']);
         })
         .catch(function(err) {
             console.error('error:', err);
             if (err === irma.SessionStatus.Cancelled)
-                setStatus('info', MESSAGES['email-add-cancel'] + MESSAGES['return-to-issue-page']);
+                setStatus('info', MESSAGES['email-add-cancel']);
             else
-                setStatus('danger', MESSAGES['email-add-error'] + MESSAGES['return-to-issue-page']);
+                setStatus('danger', MESSAGES['email-add-error']);
         });
 }
 
