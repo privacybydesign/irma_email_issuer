@@ -42,18 +42,11 @@ function setWindow(window, back) {
 }
 
 function addEmail(e) {
-    if ($('#window-email-confirm').hasClass('hidden')) {
-        setWindow('email-confirm', 'email-add');
-        return;
-    }
-
     const address = $('#email-form [id=email]').val();
-    const addressConfirmed = $('#email-form [id=email-confirm]').val();
 
-    console.log(address, addressConfirmed);
-    if (address !== addressConfirmed) {
-        setStatus('warning', MESSAGES['email-confirm-differs']);
-        setWindow('email-add');
+    if ($('#window-email-confirm').hasClass('hidden')) {
+        $('#email-confirm').text(address);
+        setWindow('email-confirm', 'email-add');
         return;
     }
 

@@ -14,7 +14,7 @@ var MESSAGES = {
     'email-add-success': 'Het e-mail adres is toegevoegd',
     'email-add-cancel': 'Gegevens toevoegen is geannuleerd. Je kan het opnieuw proberen door nogmaals op de link in de e-mail te klikken.',
     'email-add-timeout': 'De sessie is verlopen. Herlaad de pagina om het eventueel opnieuw te proberen.',
-    'email-add-error': 'Het is helaas niet gelukt dit e-mail adres toe te voegen aan de IRMA app.',
+    'email-add-error': 'Het is helaas niet gelukt dit e-mailadres toe te voegen aan de IRMA app.',
     'submit-email-add': 'Voeg adres toe',
     'submit-email-confirm': 'Bevestig',
 };
