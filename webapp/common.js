@@ -30,7 +30,7 @@ function setWindow(window, back) {
           .removeClass('button-hidden');
     } else {
         backButton.attr('href', MESSAGES['issuers-overview-page']);
-        if (location.href.includes('?inapp=true'))
+        if (navigator.userAgent.includes('Mobile/'))
             backButton.addClass('button-hidden');
     }
 
