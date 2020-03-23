@@ -60,7 +60,6 @@ function addEmail(e) {
 
     if ($('#window-email-confirm').hasClass('hidden')) {
         $('#email-confirm').text(address);
-        $('#email-sent').text(address);
         setWindow('email-confirm', 'email-add');
         return;
     }
