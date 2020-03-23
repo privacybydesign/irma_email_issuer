@@ -16,22 +16,28 @@
 </head>
 <body>
 <form id="email-form" onsubmit="javascript:return false;">
-  <header>
-    <h1>E-mailadres toevoegen</h1>
-  </header>
+  <header></header>
   <main>
-    <div id="status" class="alert hidden" role="alert"></div>
+    <div id="status-bar" class="alert hidden" role="alert">
+      <div class="status-container">
+        <div id="status"></div>
+      </div>
+    </div>
     <div id="window-email-add" class="hidden">
+      <h1>E-mailadres toevoegen</h1>
       <p>Zet je e-mailadres in je IRMA-app.</p>
-      <p>Wil je meerdere e-mailadressen toevoegen? Doorloop deze stappen dan voor elke e-mailadres dat je wilt toevoegen.</p>
+      <p>Wil je meerdere e-mailadressen toevoegen? Doorloop deze stappen dan voor elk e-mailadres dat je wilt toevoegen.</p>
       <label for="email">E-mailadres</label>
       <input type="email" id="email" required class="form-control" placeholder="email@voorbeeld.nl"/>
     </div>
     <div id="window-email-confirm" class="hidden">
-      <p>Controleer je e-mailadres nogmaals ter bevestiging.</p>
-      <p class="alert alert-info" id="email-confirm"></p>
+      <h1>E-mailadres controleren</h1>
+      <p>Controleer je e-mailadres nogmaals ter bevestiging. Kies 'Terug' om je e-mailadres te corrigeren.</p>
+      <label class="label-confirm" for="email-confirm">E-mailadres</label>
+      <div class="input-confirm email"><b id="email-confirm"></b></div>
     </div>
     <div id="window-email-sent" class="hidden">
+      <h1>E-mailadres toevoegen</h1>
       <p>Het kan een paar minuten duren voor je het e-mailbericht ontvangt. Controleer zo nodig
         ook de spam-folder. Doorloop de volgende stappen:</p>
       <ol>
@@ -42,6 +48,7 @@
       </ol>
     </div>
     <div id="window-email-verify" class="hidden">
+      <h1>E-mailadres toevoegen</h1>
       <!-- Maybe we should put here some explanation of
       what's going on behind the scenes -->
     </div>

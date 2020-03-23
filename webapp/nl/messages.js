@@ -3,10 +3,9 @@
 var MESSAGES = {
     'lang': 'nl',
     'error:email-address-malformed': 'E-mailadres is onjuist',
-    'email-confirm-differs': 'De ingevulde e-mailadressen komen niet overeen. Probeer het opnieuw.',
-    'sending-verification-email': 'Een verificatiemail wordt verzonden aan %address%…',
-    'sent-verification-email': 'De verificatiemail is verzonden aan %address%.',
-    'verifying-email-token': 'Het e-mail adres wordt geverifieerd...',
+    'sending-verification-email': 'Een e-mail wordt gestuurd naar:<br><b class="email">%address%</b>',
+    'sent-verification-email': 'Er is een e-mail gestuurd naar:<br><b class="email">%address%</b>',
+    'verifying-email-token': 'Het e-mailadres wordt geverifieerd...',
     'unknown-problem': 'Onbekend probleem',
     'error:invalid-token': 'De link in de e-mail is verouderd of ongeldig',
     'email-failed-to-verify': 'Onbekend probleem tijdens het verifiëren van het e-mail adres',

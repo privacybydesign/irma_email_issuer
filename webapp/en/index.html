@@ -16,24 +16,34 @@
 </head>
 <body>
 <form id="email-form" onsubmit="javascript:return false;">
-  <header>
-    <h1>Adding an e-mail address</h1>
-  </header>
+  <header></header>
   <main>
-    <div id="status" class="alert hidden" role="alert"></div>
+    <div id="status-bar" class="alert hidden" role="alert">
+      <div class="status-container">
+        <div id="status"></div>
+      </div>
+    </div>
     <div id="window-email-add" class="hidden">
-      <p>On this page you can add an e-mail address
-        to your IRMA app. If you want to add multiple
-        e-mail addresses to the IRMA app, you have to
-        perform these steps multiple times.</p>
+      <h1>Adding an e-mail address</h1>
+      <p>On this page you can add an e-mail address to your IRMA app.</p>
+      <p>
+        If you want to add multiple e-mail addresses to the IRMA app,
+        you have to perform these steps multiple times.
+      </p>
       <label for="email">E-mail address</label>
       <input type="email" id="email" required class="form-control" placeholder="email@example.com" />
     </div>
     <div id="window-email-confirm" class="hidden">
-      <p>Please check your e-mail address again for correctness.</p>
-      <p class="alert alert-info" id="email-confirm"></p>
+      <h1>Check e-mail address</h1>
+      <p>
+        Please check your e-mail address again for correctness.
+        Choose 'Back' to correct your e-mail address.
+      </p>
+      <label class="label-confirm" for="email-confirm">E-mail address</label>
+      <div class="input-confirm email"><b id="email-confirm"></b></div>
     </div>
     <div id="window-email-sent" class="hidden">
+      <h1>Adding an e-mail address</h1>
       <p>It may take a couple of minutes for the e-mail to arrive.
         If you do not see it, check your spam folder too. Please go
         through the following steps:</p>
@@ -45,6 +55,7 @@
       </ol>
     </div>
     <div id="window-email-verify" class="hidden">
+      <h1>Adding an e-mail address</h1>
       <!-- Maybe we should put here some explanation of
       what's going on behind the scenes -->
     </div>

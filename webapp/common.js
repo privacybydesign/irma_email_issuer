@@ -1,5 +1,7 @@
 'use strict';
 
+const isMobile = navigator.userAgent.includes('Mobile/');
+
 function init() {
     $('#email-form').on('submit', addEmail);
 
@@ -21,16 +23,25 @@ function setWindow(window, back) {
     $('[id^=window-]').addClass('hidden');
     $('#window-'+window).removeClass('hidden');
 
+    // Put h1 in header when not being on mobile
+    const h1 = $('#window-'+window + ' h1');
+    if (isMobile) {
+        $('header').hide();
+        h1.show();
+    } else {
+        $('header').html(h1.clone().show()).show();
+        h1.hide();
+    }
     const backButton = $('#back-button');
     backButton.off();
     if (back) {
         backButton
-          .click(() => {setWindow(back); return false;})
+          .click(() => {clearStatus(); setWindow(back); return false;})
           .removeAttr('href')
           .removeClass('button-hidden');
     } else {
         backButton.attr('href', MESSAGES['issuers-overview-page']);
-        if (navigator.userAgent.includes('Mobile/'))
+        if (isMobile)
             backButton.addClass('button-hidden');
     }
 
@@ -49,6 +60,7 @@ function addEmail(e) {
 
     if ($('#window-email-confirm').hasClass('hidden')) {
         $('#email-confirm').text(address);
+        $('#email-sent').text(address);
         setWindow('email-confirm', 'email-add');
         return;
     }
@@ -121,14 +133,18 @@ function handleIssuanceError(e) {
 }
 
 function setStatus(alertType, message) {
-    $('#status')
+    $('#status').html(message);
+    $('#status-bar')
         .removeClass('alert-success')
         .removeClass('alert-info')
         .removeClass('alert-warning')
         .removeClass('alert-danger')
         .addClass('alert-'+alertType)
-        .html(message)
         .removeClass('hidden');
+}
+
+function clearStatus() {
+    $('#status-bar').addClass('hidden');
 }
 
 init();
