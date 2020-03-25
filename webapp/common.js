@@ -72,7 +72,7 @@ function addEmail(e) {
             // Mail was sent - but we don't know whether it'll be received
             // (e.g. address may not exist).
             console.log('success', e);
-            setStatus('info', MESSAGES['sent-verification-email'].replace('%address%', address));
+            setStatus('success', MESSAGES['sent-verification-email'].replace('%address%', address));
         })
         .fail(function(e) {
             // Address format problem?
