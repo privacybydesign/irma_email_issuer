@@ -1,6 +1,6 @@
 'use strict';
 
-const isMobile = navigator.userAgent.includes('Mobile/');
+const isInApp = location.href.includes('?inapp=true');
 
 function init() {
     $('#email-form').on('submit', addEmail);
@@ -25,7 +25,7 @@ function setWindow(window, back) {
 
     // Put h1 in header when not being on mobile
     const h1 = $('#window-'+window + ' h1');
-    if (isMobile) {
+    if (isInApp) {
         $('header').hide();
         h1.show();
     } else {
@@ -41,7 +41,7 @@ function setWindow(window, back) {
           .removeClass('button-hidden');
     } else {
         backButton.attr('href', MESSAGES['issuers-overview-page']);
-        if (isMobile)
+        if (isInApp)
             backButton.addClass('button-hidden');
     }
 
