@@ -1,6 +1,6 @@
 {
   "verify_email_subject": {
-    "en": "Add email adress to your IRMA app",
+    "en": "Add email address to your IRMA app",
     "nl": "Voeg e-mailadres toe aan uw IRMA app"
   },
   "server_url": "http://localhost:8080/irma_email_issuer",
