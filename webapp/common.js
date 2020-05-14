@@ -140,6 +140,7 @@ function setStatus(alertType, message) {
         .removeClass('alert-danger')
         .addClass('alert-'+alertType)
         .removeClass('hidden');
+    window.scrollTo(0,0);
 }
 
 function clearStatus() {
