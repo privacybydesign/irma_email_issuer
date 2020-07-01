@@ -16,6 +16,7 @@ function init() {
     } else {
         // Default window
         setWindow('email-add');
+        $('#email-form input').prop('disabled', false);
     }
 }
 
