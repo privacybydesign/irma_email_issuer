@@ -3,7 +3,10 @@
     "en": "Add email address to your IRMA app",
     "nl": "Voeg e-mailadres toe aan uw IRMA app"
   },
-  "server_url": "http://localhost:8080/irma_email_issuer",
+  "server_url": {
+    "en": "http://localhost:8080/irma_email_issuer",
+    "nl": "http://localhost:8080/irma_email_issuer"
+  },
   "mail_host": "smtp.science.ru.nl",
   "mail_port": 25,
   "mail_user": "",
