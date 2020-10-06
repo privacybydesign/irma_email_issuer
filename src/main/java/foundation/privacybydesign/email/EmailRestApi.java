@@ -56,7 +56,7 @@ public class EmailRestApi {
             lang = EmailConfiguration.getInstance().getDefaultLanguage();
         String token = signer.createToken(email);
         try {
-            String url = conf.getServerURL() + "#verify-email/" + token
+            String url = conf.getServerURL(lang) + "#verify-email/" + token
                     + "/" + URLEncoder.encode(client.getReturnURL(), StandardCharsets.UTF_8.toString());
             EmailSender.send(
                     email,
@@ -109,7 +109,7 @@ public class EmailRestApi {
                     mailBodyTemplate,
                     null,
                     true,
-                    conf.getServerURL() + "#verify-email/" + token
+                    conf.getServerURL(language) + "#verify-email/" + token
             );
         } catch (AddressException e) {
             logger.error("Invalid address: {}: {}", emailAddress, e.getMessage());

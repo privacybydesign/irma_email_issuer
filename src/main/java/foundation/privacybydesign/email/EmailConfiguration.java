@@ -17,13 +17,13 @@ public class EmailConfiguration extends BaseConfiguration {
 
     static EmailConfiguration instance;
     static final String CONFIG_FILENAME = "config.json";
-    
+
     static {
     	BaseConfiguration.confDirName = "irma_email_issuer";
     }
 
     private Map<String, String> verify_email_subject = null;
-    private String server_url;
+    private Map<String, String> server_url = null;
     private String mail_host = "";
     private int mail_port = 25;
     private String mail_user = "";
@@ -71,7 +71,7 @@ public class EmailConfiguration extends BaseConfiguration {
             throw new RuntimeException(e);
         }
     }
-    
+
     public PrivateKey getPrivateKey() throws KeyManagementException {
         return BaseConfiguration.getPrivateKey("sk.der");
     }
@@ -116,7 +116,7 @@ public class EmailConfiguration extends BaseConfiguration {
         return default_language;
     }
 
-    public String getServerURL() {
-        return server_url;
+    public String getServerURL(String language) {
+        return server_url.get(language);
     }
 }
