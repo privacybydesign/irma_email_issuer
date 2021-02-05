@@ -134,7 +134,7 @@ public class EmailRestApi {
     public Response verifyEmailToken(@FormParam("token") String token) throws KeyManagementException {
         EmailConfiguration conf = EmailConfiguration.getInstance();
 
-        String emailAddress = signer.verifyToken(token);
+        String emailAddress = signer.verifyToken(token).toLowerCase();
         if (emailAddress == null) {
             // cannot verify (may be expired or have an invalid signature)
             // TODO: inform the user if it's expired vs other errors
