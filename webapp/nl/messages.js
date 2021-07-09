@@ -16,4 +16,5 @@ var MESSAGES = {
     'email-add-error': 'Het is helaas niet gelukt dit e-mailadres toe te voegen aan de IRMA app.',
     'submit-email-add': 'Voeg adres toe',
     'submit-email-confirm': 'Bevestig',
+    'issuers-overview-page': 'https://privacybydesign.foundation/uitgifte/',
 };

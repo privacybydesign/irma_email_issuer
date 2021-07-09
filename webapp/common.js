@@ -41,7 +41,7 @@ function setWindow(window, back) {
           .removeAttr('href')
           .removeClass('button-hidden');
     } else {
-        backButton.attr('href', 'javascript:history.length==1?window.close():history.back()');
+        backButton.attr('href', MESSAGES['issuers-overview-page']);
         if (isInApp)
             backButton.addClass('button-hidden');
     }
