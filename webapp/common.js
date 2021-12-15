@@ -57,7 +57,7 @@ function setWindow(window, back) {
 }
 
 function addEmail(e) {
-    const address = $('#email-form [id=email]').val();
+    const address = $('#email-form [id=email]').val().toLowerCase();
 
     if ($('#window-email-confirm').hasClass('hidden')) {
         $('#email-confirm').text(address);

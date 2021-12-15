@@ -54,6 +54,13 @@ public class EmailRestApi {
 
         if (lang == null || lang.length() == 0)
             lang = EmailConfiguration.getInstance().getDefaultLanguage();
+
+        // We only accept lowercase email addresses.
+        if (!email.equals(email.toLowerCase())) {
+            logger.error("Address contains uppercase characters: {}", email);
+            return Response.status(Response.Status.BAD_REQUEST).entity(ERR_ADDRESS_MALFORMED).build();
+        }
+
         String token = signer.createToken(email);
         try {
             String url = conf.getServerURL(lang) + "#verify-email/" + token
@@ -90,6 +97,12 @@ public class EmailRestApi {
     public Response sendEmailToken(@FormParam("email") String emailAddress,
                                    @FormParam("language") String language) {
         EmailConfiguration conf = EmailConfiguration.getInstance();
+
+        // We only accept lowercase email addresses.
+        if (!emailAddress.equals(emailAddress.toLowerCase())) {
+            logger.error("Address contains uppercase characters: {}", emailAddress);
+            return Response.status(Response.Status.BAD_REQUEST).entity(ERR_ADDRESS_MALFORMED).build();
+        }
 
         // Test email with signature
         String token = signer.createToken(emailAddress);
@@ -134,7 +147,7 @@ public class EmailRestApi {
     public Response verifyEmailToken(@FormParam("token") String token) throws KeyManagementException {
         EmailConfiguration conf = EmailConfiguration.getInstance();
 
-        String emailAddress = signer.verifyToken(token).toLowerCase();
+        String emailAddress = signer.verifyToken(token);
         if (emailAddress == null) {
             // cannot verify (may be expired or have an invalid signature)
             // TODO: inform the user if it's expired vs other errors
