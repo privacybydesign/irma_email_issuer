@@ -95,13 +95,21 @@ function issue(jwt, url) {
     setStatus('info', MESSAGES['email-add-verified']);
     console.log('success: ', jwt);
 
-    irma.startSession(config.IRMASERVER, jwt, 'publickey')
-        .then(function(pkg) {
-            console.log('session started');
-            return irma.handleSession(pkg.sessionPtr,
-                {method: 'popup', language: language}
-            );
-        })
+    irma.newPopup({
+        url: config.IRMASERVER,
+        language: language,
+        session: {
+            start: {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain',
+                },
+                body: jwt,
+            },
+            result: false,
+        },
+    })
+        .start()
         .then(function() {
             console.log('session done');
             if (url) {
@@ -112,7 +120,7 @@ function issue(jwt, url) {
         })
         .catch(function(err) {
             console.error('error:', err);
-            if (err === irma.SessionStatus.Cancelled)
+            if (err === 'Aborted')
                 setStatus('info', MESSAGES['email-add-cancel']);
             else
                 setStatus('danger', MESSAGES['email-add-error']);

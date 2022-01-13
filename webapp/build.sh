@@ -16,4 +16,4 @@ cp -r ./fonts ./build/assets/
 cp ./style.css ./build/assets/
 cp ./common.js ./build/assets/
 cp ./node_modules/jquery/dist/jquery.min.js ./build/assets/
-cp ./node_modules/@privacybydesign/irmajs/dist/irma.js ./build/assets/
+cp ./node_modules/@privacybydesign/irma-frontend/dist/irma.js ./build/assets/
