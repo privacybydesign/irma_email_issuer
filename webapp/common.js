@@ -98,12 +98,15 @@ function issue(jwt, url) {
     irma.newPopup({
         url: config.IRMASERVER,
         language: language,
-        start: {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'text/plain',
+        session: {
+            start: {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain',
+                },
+                body: jwt,
             },
-            body: jwt,
+            result: false,
         },
     })
         .start()
