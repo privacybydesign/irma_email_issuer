@@ -29,10 +29,10 @@ build-war:
     - mkdir artifacts
     - gradle clean
     - gradle build
-    - mv build/libs/irma_email_issuer-1.0.war ./
+    - mv build/libs/irma_email_issuer-*.war ./irma_email_issuer.war
   artifacts:
     # Disabling artifact expiry is not supported yet, so make
     expire_in: 100 year
     paths:
-      - irma_email_issuer-1.0.war
+      - irma_email_issuer.war
     
