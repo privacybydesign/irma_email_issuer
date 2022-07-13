@@ -79,7 +79,7 @@ public class EmailSender {
             }
             Transport.send(message);
         } catch (MessagingException e) {
-            logger.error("Sending mail to {} failed:\n{}", toAddresses, e.getMessage());
+            logger.error("Sending mail failed:\n{}", e.getMessage());
         }
     }
 }
