@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euxo pipefail
 
 if [ $# -ne 1 ]; then
-	echo "Usage: $0 [language]"
-	exit 1
+    echo "Usage: $0 [language]"
+    exit 1
 fi
 
 cd "$(dirname "$0")"
