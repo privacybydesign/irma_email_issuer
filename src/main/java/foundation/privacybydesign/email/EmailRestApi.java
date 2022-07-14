@@ -57,7 +57,7 @@ public class EmailRestApi {
 
         // We only accept lowercase email addresses.
         if (!email.equals(email.toLowerCase())) {
-            logger.error("Address contains uppercase characters: {}", email);
+            logger.error("Address contains uppercase characters");
             return Response.status(Response.Status.BAD_REQUEST).entity(ERR_ADDRESS_MALFORMED).build();
         }
 
@@ -74,7 +74,7 @@ public class EmailRestApi {
                     url
             );
         } catch (AddressException e) {
-            logger.error("Invalid address: {}: {}", email, e.getMessage());
+            logger.error("Invalid address: {}", e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity(ERR_ADDRESS_MALFORMED).build();
         } catch (UnsupportedEncodingException e) {
             logger.error("Invalid return URL: {}: {}", client.getReturnURL(), e.getMessage());
@@ -100,7 +100,7 @@ public class EmailRestApi {
 
         // We only accept lowercase email addresses.
         if (!emailAddress.equals(emailAddress.toLowerCase())) {
-            logger.error("Address contains uppercase characters: {}", emailAddress);
+            logger.error("Address contains uppercase characters");
             return Response.status(Response.Status.BAD_REQUEST).entity(ERR_ADDRESS_MALFORMED).build();
         }
 
@@ -125,7 +125,7 @@ public class EmailRestApi {
                     conf.getServerURL(language) + "#verify-email/" + token
             );
         } catch (AddressException e) {
-            logger.error("Invalid address: {}: {}", emailAddress, e.getMessage());
+            logger.error("Invalid address: {}", e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity
                     (ERR_ADDRESS_MALFORMED).build();
         }
@@ -156,7 +156,7 @@ public class EmailRestApi {
         }
         String[] emailParts = emailAddress.split("@");
         if (emailParts.length != 2) {
-            logger.error("Invalid address: {}", emailAddress);
+            logger.error("Invalid address");
             return Response.status(Response.Status.BAD_REQUEST).entity
                     (ERR_ADDRESS_MALFORMED).build();
         }
