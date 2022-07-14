@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Check if openssl exists
 if ! type openssl >/dev/null 2>&1; then
@@ -7,16 +7,16 @@ if ! type openssl >/dev/null 2>&1; then
 fi
 
 if [[ $# -eq 0 ]]; then
-	SK=sk
-	PK=pk
+    SK=sk
+    PK=pk
 fi
 if [[ $# -eq 1 ]]; then
-	>&2 echo "Either supply 0 or 2 arguments"
-	exit 1
+    >&2 echo "Either supply 0 or 2 arguments"
+    exit 1
 fi
 if [[ $# -eq 2 ]]; then
-	SK=$1
-	PK=$2
+    SK=$1
+    PK=$2
 fi
 
 if [ -e ${SK}.der ] || [ -e ${PK}.der ]; then
