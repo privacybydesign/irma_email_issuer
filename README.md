@@ -10,9 +10,7 @@ Add an email address for use in your [IRMA app](https://github.com/privacybydesi
 Go, Gradle v4, JDK, Yarn, and an installation of IRMA server:
 
 ```bash
-git clone git@github.com:privacybydesign/irmago.git
-cd irmago/
-go install ./irma
+go install github.com/privacybydesign/irmago@latest
 ```
 
 ### Install
@@ -35,18 +33,12 @@ gradle build
 cp src/main/resources/config.sample.json build/resources/main/config.json
 sed -i 's/"secret_key": "",/"secret_key": "thisisjustavalueandnotarealsecretsomemorecharactersuntilwehave64",/' ./build/resources/main/config.json
 ```
-5. Create and configure front end
+5. Create front end
 ```bash
 ( cd webapp/
 yarn install
 ./build.sh nl
-cat > build/assets/config.js <<EOD
-var config = {
-  IRMASERVER: 'http://localhost:8088',
-  EMAILSERVER: 'http://localhost:8080/irma_email_issuer',
-};
-EOD
-)
+cp webapp/config.example.js build/assets/config.js
 cp -a webapp/ src/main/
 ```
 6. Configure mail delivery in `build/resources/main/config.json`
