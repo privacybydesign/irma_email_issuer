@@ -26,13 +26,16 @@ cd irma_email_issuer/
 ```bash
 ./utils/keygen.sh ./src/main/resources/sk ./src/main/resources/pk
 ```
-3. Copy `src/main/resources/config.sample.json` to `build/resources/main/config.json` and modify it
+3. Build the project
 ```bash
 gradle build
+```
+4. Copy `src/main/resources/config.sample.json` to `build/resources/main/config.json` and modify it
+```bash
 cp src/main/resources/config.sample.json build/resources/main/config.json
 sed -i 's/"secret_key": "",/"secret_key": "thisisjustavalueandnotarealsecretsomemorecharactersuntilwehave64",/' ./build/resources/main/config.json
 ```
-4. Create and configure front end
+5. Create and configure front end
 ```bash
 ( cd webapp/
 yarn install
@@ -46,7 +49,7 @@ EOD
 )
 cp -a webapp/ src/main/
 ```
-5. Configure mail delivery in `build/resources/main/config.json`
+6. Configure mail delivery in `build/resources/main/config.json`
 
 ### Run
 
