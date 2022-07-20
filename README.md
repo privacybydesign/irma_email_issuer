@@ -57,6 +57,9 @@ cp -a webapp/ src/main/
 ```bash
 ~/go/bin/irma server --static-path ./webapp/build
 ```
-2. Run the application with `gradle appRun`
+2. Run the application
+```bash
+gradle appRun
+```
 3. Navigate to `http://localhost:8088/` with CORS disabled
 (for example: `chromium --disable-web-security --user-data-dir=/tmp/chromium-disable-web-security`)
