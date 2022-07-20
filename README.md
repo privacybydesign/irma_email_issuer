@@ -47,10 +47,13 @@ EOD
 cp -a webapp/ src/main/
 ```
 5. Configure mail delivery in `build/resources/main/config.json`
-6. Start IRMA server (in the root directory of this project)
+
+### Run
+
+1. Start IRMA server (in the root directory of this project)
 ```bash
 ~/go/bin/irma server --static-path ./webapp/build
 ```
-7. Run the application with `gradle appRun`
-8. Navigate to `http://localhost:8088/` with CORS disabled
+2. Run the application with `gradle appRun`
+3. Navigate to `http://localhost:8088/` with CORS disabled
 (for example: `chromium --disable-web-security --user-data-dir=/tmp/chromium-disable-web-security`)
