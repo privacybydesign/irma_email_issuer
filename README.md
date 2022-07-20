@@ -38,7 +38,7 @@ sed -i 's/"secret_key": "",/"secret_key": "thisisjustavalueandnotarealsecretsome
 ( cd webapp/
 yarn install
 ./build.sh nl
-cp webapp/config.example.js build/assets/config.js
+cp config.example.js build/assets/config.js )
 cp -a webapp/ src/main/
 ```
 6. Configure mail delivery in `build/resources/main/config.json`
