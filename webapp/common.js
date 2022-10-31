@@ -35,13 +35,15 @@ function setWindow(window, back) {
     }
     const backButton = $('#back-button');
     backButton.off();
+    backButton.hide();
     if (back) {
+        backButton.show();
         backButton
           .click(() => {clearStatus(); setWindow(back); return false;})
           .removeAttr('href')
           .removeClass('button-hidden');
     } else {
-        backButton.attr('href', MESSAGES['issuers-overview-page']);
+        backButton.attr('href', 'javascript:history.length==1?window.close():history.back()');
         if (isInApp)
             backButton.addClass('button-hidden');
     }
