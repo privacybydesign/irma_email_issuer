@@ -35,17 +35,13 @@ function setWindow(window, back) {
     }
     const backButton = $('#back-button');
     backButton.off();
-    backButton.hide();
     if (back) {
-        backButton.show();
         backButton
           .click(() => {clearStatus(); setWindow(back); return false;})
           .removeAttr('href')
           .removeClass('button-hidden');
-    } else {
-        backButton.attr('href', 'javascript:history.length==1?window.close():history.back()');
-        if (isInApp)
-            backButton.addClass('button-hidden');
+    } else if (history.length == 1) {
+        backButton.addClass('button-hidden');
     }
 
     const submitButtonText = MESSAGES['submit-' + window];
@@ -53,9 +49,9 @@ function setWindow(window, back) {
     if (submitButtonText) {
         submitButton.text(submitButtonText);
         submitButton.removeClass('hidden');
-    }
-    else
+    } else {
         submitButton.addClass('hidden');
+    }
 }
 
 function addEmail(e) {
