@@ -38,12 +38,13 @@ function setWindow(window, back) {
     if (back) {
         backButton
           .click(() => {clearStatus(); setWindow(back); return false;})
-          .removeAttr('href')
+          .removeClass('button-hidden');
+    } else if (history.length > 1) {
+        backButton
+          .click(() => {clearStatus(); history.back(); return false;})
           .removeClass('button-hidden');
     } else {
-        backButton.attr('href', MESSAGES['issuers-overview-page']);
-        if (isInApp)
-            backButton.addClass('button-hidden');
+        backButton.addClass('button-hidden');
     }
 
     const submitButtonText = MESSAGES['submit-' + window];
@@ -51,9 +52,9 @@ function setWindow(window, back) {
     if (submitButtonText) {
         submitButton.text(submitButtonText);
         submitButton.removeClass('hidden');
-    }
-    else
+    } else {
         submitButton.addClass('hidden');
+    }
 }
 
 function addEmail(e) {
