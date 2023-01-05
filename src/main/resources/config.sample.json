@@ -1,7 +1,7 @@
 {
   "verify_email_subject": {
-    "en": "Add email address to your IRMA app",
-    "nl": "Voeg e-mailadres toe aan je IRMA app"
+    "en": "Add email address to your Yivi app",
+    "nl": "Voeg e-mailadres toe aan je Yivi-app"
   },
   "server_url": {
     "en": "http://localhost:8080/irma_email_issuer",
@@ -11,7 +11,7 @@
   "mail_port": 25,
   "mail_user": "",
   "mail_password": "",
-  "mail_from_address": "IRMA Email Issuer <irma@privacybydesign.foundation>",
+  "mail_from_address": "Yivi Email Issuer <yivi@privacybydesign.foundation>",
   "secret_key": "",
   "token_validity": 86400,
   "private_key_path": "sk.der",
