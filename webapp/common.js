@@ -75,11 +75,18 @@ function addEmail(e) {
             // (e.g. address may not exist).
             console.log('success', e);
             setStatus('success', MESSAGES['sent-verification-email'].replace('%address%', address));
+
+            // Make empty and editable again
+            $('#email-form input').prop('disabled', false).val('');
         })
         .fail(function(e) {
             // Address format problem?
             setStatus('danger', MESSAGES[e.responseText] || MESSAGES['unknown-problem']);
             setWindow('email-add');
+
+            // Make editable again
+            $('#email-form input').prop('disabled', false);
+
             console.error('fail', e.responseText);
         });
 }
