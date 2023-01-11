@@ -97,9 +97,9 @@ function issue(jwt, url) {
     console.log('success: ', jwt);
 
     yivi.newPopup({
-        url: config.IRMASERVER,
         language: language,
         session: {
+            url: config.IRMASERVER,
             start: {
                 method: 'POST',
                 headers: {
