@@ -13,7 +13,7 @@
   "mail_password": "",
   "mail_from_address": "IRMA Email Issuer <irma@privacybydesign.foundation>",
   "secret_key": "",
-  "token_validity": 86400,
+  "token_validity": 604800,
   "private_key_path": "sk.der",
   "server_name": "irma_email_issuer",
   "human_readable_name": "Privacy by Design Foundation",
