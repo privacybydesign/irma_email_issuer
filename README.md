@@ -1,7 +1,7 @@
 
 # Email server
 
-Add an email address for use in your [IRMA app](https://github.com/privacybydesign/irma_mobile).
+Add an email address for use in your [Yivi app](https://github.com/privacybydesign/irma_mobile).
 
 
 ## Setting up the server

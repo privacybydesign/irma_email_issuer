@@ -13,7 +13,7 @@ var MESSAGES = {
     'email-add-success': 'E-mail address added',
     'email-add-cancel': 'Adding personal data is cancelled. You can retry by clicking on the link in the e-mail again.',
     'email-add-timeout': 'Session timed out. Reload this page in order to try again.',
-    'email-add-error': 'Unfortunately, adding this e-mail address to the IRMA app did not succeed.',
+    'email-add-error': 'Unfortunately, adding this e-mail address to your Yivi app did not succeed.',
     'submit-email-add': 'Add address',
     'submit-email-confirm': 'Confirm',
     'issuers-overview-page': 'https://privacybydesign.foundation/issuance/',

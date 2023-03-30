@@ -103,10 +103,10 @@ function issue(jwt, url) {
     setStatus('info', MESSAGES['email-add-verified']);
     console.log('success: ', jwt);
 
-    irma.newPopup({
-        url: config.IRMASERVER,
+    yivi.newPopup({
         language: language,
         session: {
+            url: config.IRMASERVER,
             start: {
                 method: 'POST',
                 headers: {

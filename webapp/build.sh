@@ -13,7 +13,8 @@ mkdir -p ./build/assets
 cp ./$1/index.html ./build/
 cp ./$1/messages.js ./build/assets/
 cp -r ./fonts ./build/assets/
+cp -r ./images ./build/assets/
 cp ./style.css ./build/assets/
 cp ./common.js ./build/assets/
 cp ./node_modules/jquery/dist/jquery.min.js ./build/assets/
-cp ./node_modules/@privacybydesign/irma-frontend/dist/irma.js ./build/assets/
+cp ./node_modules/@privacybydesign/yivi-frontend/dist/yivi.js ./build/assets/
