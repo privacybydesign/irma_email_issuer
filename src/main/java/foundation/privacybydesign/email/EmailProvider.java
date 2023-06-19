@@ -2,7 +2,7 @@ package foundation.privacybydesign.email;
 
 import foundation.privacybydesign.common.email.EmailTokens;
 
-import javax.mail.internet.AddressException;
+import jakarta.mail.internet.AddressException;
 
 /**
  * Test console application. Quite useless now, but was useful while writing

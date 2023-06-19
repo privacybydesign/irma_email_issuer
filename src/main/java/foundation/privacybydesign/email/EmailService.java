@@ -6,7 +6,7 @@ package foundation.privacybydesign.email;
 
 import org.glassfish.jersey.server.ResourceConfig;
 
-import javax.ws.rs.*;
+import jakarta.ws.rs.*;
 
 @ApplicationPath("/")
 public class EmailService extends ResourceConfig {
