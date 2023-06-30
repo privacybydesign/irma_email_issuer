@@ -48,7 +48,7 @@ jobs:
         - uses: actions/setup-java@v2
           with:
             java-version: '11'
-            distribution: adopt
+            distribution: temurin
             cache: gradle
 
         - name: Clean
@@ -57,10 +57,13 @@ jobs:
         - name: Build
           run: ./gradlew build
 
+        - name: Remove version number from WAR
+          run: mv build/libs/irma_email_issuer-*.war build/libs/irma_email_issuer.war
+
         - uses: actions/upload-artifact@v3
           with:
             name: war
-            path: build/libs/irma_email_issuer-*.war
+            path: build/libs/irma_email_issuer.war
 
     analyze:
       needs: build-war
