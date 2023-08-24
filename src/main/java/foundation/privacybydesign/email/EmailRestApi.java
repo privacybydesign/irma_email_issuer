@@ -1,7 +1,5 @@
 package foundation.privacybydesign.email;
 
-import foundation.privacybydesign.common.email.EmailTokens;
-import foundation.privacybydesign.common.filters.RateLimit;
 import org.irmacard.api.common.ApiClient;
 import org.irmacard.api.common.CredentialRequest;
 import org.irmacard.api.common.issuing.IdentityProviderRequest;
@@ -10,10 +8,10 @@ import org.irmacard.credentials.info.CredentialIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.mail.internet.AddressException;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.mail.internet.AddressException;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -93,7 +91,6 @@ public class EmailRestApi {
     @POST
     @Path("/send-email-token")
     @Produces(MediaType.TEXT_PLAIN)
-    @RateLimit
     public Response sendEmailToken(@FormParam("email") String emailAddress,
                                    @FormParam("language") String language) {
         EmailConfiguration conf = EmailConfiguration.getInstance();

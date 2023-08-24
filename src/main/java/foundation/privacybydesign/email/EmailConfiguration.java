@@ -1,6 +1,6 @@
 package foundation.privacybydesign.email;
 
-import foundation.privacybydesign.common.BaseConfiguration;
+import foundation.privacybydesign.email.common.BaseConfiguration;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.irmacard.api.common.util.GsonUtil;
 import org.slf4j.Logger;
@@ -12,7 +12,7 @@ import java.security.PrivateKey;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EmailConfiguration extends BaseConfiguration {
+public class EmailConfiguration extends BaseConfiguration<EmailConfiguration> {
     private static Logger logger = LoggerFactory.getLogger(Client.class);
 
     static EmailConfiguration instance;
