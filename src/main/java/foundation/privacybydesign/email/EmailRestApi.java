@@ -77,6 +77,9 @@ public class EmailRestApi {
         } catch (UnsupportedEncodingException e) {
             logger.error("Invalid return URL: {}: {}", client.getReturnURL(), e.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        } catch (Exception e) {
+            logger.error("Sending mail failed:\n{}", e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
         return Response.status(Response.Status.OK).entity(OK_RESPONSE).build();
     }
@@ -125,6 +128,9 @@ public class EmailRestApi {
             logger.error("Invalid address: {}", e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity
                     (ERR_ADDRESS_MALFORMED).build();
+        } catch (Exception e) {
+            logger.error("Sending mail failed:\n{}", e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
         return Response.status(Response.Status.OK).entity
                 (OK_RESPONSE).build();
