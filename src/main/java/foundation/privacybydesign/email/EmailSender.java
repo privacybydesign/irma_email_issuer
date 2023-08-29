@@ -63,14 +63,11 @@ public class EmailSender {
             body = String.format(body, o);
 
         if (html) {
-            MimeBodyPart messageBodyPart = new MimeBodyPart();
-            messageBodyPart.setContent(body, "text/html");
-            Multipart multipart = new MimeMultipart();
-            multipart.addBodyPart(messageBodyPart);
-            message.setContent(multipart);
+            message.setContent(body, "text/html");
         } else {
             message.setText(body);
         }
+
         Transport.send(message);
     }
 }
