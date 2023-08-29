@@ -55,11 +55,11 @@ public class EmailTokensTest {
     }
 
     @Test
-    public void testTamperedTimeToken3() {      
-        Long maxVal = Long.MAX_VALUE;
+    public void testTamperedTimeToken3() {
+        long maxVal = Long.MAX_VALUE;
         assertNull("token with a changed time causing an overflow must be null",
                 signer.verifyToken("testtoken:" + maxVal + ":sadRkftPRiBhl1eXrgUwDFwYOfwm-Zkdg_ubOABkVXM"));
-    } 
+    }
 
     @Test
     public void testTamperedMessageToken() {
