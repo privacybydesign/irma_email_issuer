@@ -17,7 +17,7 @@ $ utils/keygen.sh ./src/main/resources/sk ./src/main/resources/pk
 2. Create the Java app configuration:
 Copy the file `src/main/resources/config.sample.json` to `src/main/resources/main/config.json`.
 
-4. Update docker-compose.yml with your local IP address:
+3. Update docker-compose.yml with your local IP address:
 Set the `- "--url=http://ip-address:8088"` parameter inside `docker-compose.yml` to match the IP address of your development machine. For example:
 ```yml
     entrypoint:

@@ -50,9 +50,8 @@ public class EmailRestApi {
         if (client == null)
             return Response.status(Response.Status.UNAUTHORIZED).build();
 
-        if (lang == null || lang.length() == 0)
-            lang = EmailConfiguration.getInstance().getDefaultLanguage();
-
+        lang = parseLanguage(lang);
+     
         // We only accept lowercase email addresses.
         if (!email.equals(email.toLowerCase())) {
             logger.error("Address contains uppercase characters");
@@ -107,8 +106,8 @@ public class EmailRestApi {
         // Test email with signature
         String token = signer.createToken(emailAddress);
 
-        if (language == null || language.length() == 0)
-            language = EmailConfiguration.getInstance().getDefaultLanguage();
+        language = parseLanguage(language);
+
         String mailBodyTemplate = conf.getVerifyEmailBody(language);
         if (mailBodyTemplate == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity
@@ -191,5 +190,22 @@ public class EmailRestApi {
                 conf.getPrivateKey());
         return Response.status(Response.Status.OK)
                 .entity(jwt).build();
+    }
+
+    /**
+     * Return a sanitized language code or the default language based on the given input
+     * 
+     * @param language the language code to sanitize
+     * @return String with language code
+     */
+    private String parseLanguage(String language){
+        if (language == null || language.length() == 0){
+            language = EmailConfiguration.getInstance().getDefaultLanguage();
+        }
+        else {
+            // Only allow letters in the language code to prevent path and other injection attacts
+            language = language.replaceAll("[^a-zA-Z]", "");
+        }
+        return language;
     }
 }
