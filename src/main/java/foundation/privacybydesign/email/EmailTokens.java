@@ -85,7 +85,7 @@ public class EmailTokens {
         String[] parts = token.split(":");
         if (parts.length != 3) {
             // invalid syntax
-            logger.error("Token {} does not have 3 parts", token);
+            logger.error("Token does not have 3 parts");
             return null;
         }
         String value = parts[0];
@@ -97,15 +97,21 @@ public class EmailTokens {
             creationTime = Long.parseLong(timestamp);
         } catch (NumberFormatException e) {
             // Invalid syntax
-            logger.error("Token {} has non-integer creation time", token);
+            logger.error("Token has non-integer creation time");
             return null;
         }
 
         // Verify expired tokens
-        long currentTime = System.currentTimeMillis() / 1000;
-        if (currentTime > creationTime+tokenValidity) {
-            // Token is no longer valid.
-            logger.error("Token {} has expired", token);
+        try {
+            long currentTime = System.currentTimeMillis() / 1000;
+            if (currentTime > Math.addExact(creationTime, tokenValidity)) {
+                // Token is no longer valid.
+                logger.error("Token has expired");
+                return null;
+            }
+        } catch (ArithmeticException e) {
+            // Adding times resulted in a long overflow.
+            logger.error("Token has invalid creation time");
             return null;
         }
 
@@ -115,7 +121,7 @@ public class EmailTokens {
                 calculatedDigestText.toCharArray())) {
             return value;
         } else {
-            logger.error("Token {} has invalid HMAC", token);
+            logger.error("Token has invalid HMAC");
             return null;
         }
     }

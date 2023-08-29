@@ -1,6 +1,5 @@
 package foundation.privacybydesign.email;
 
-import foundation.privacybydesign.email.EmailTokens;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -54,6 +53,13 @@ public class EmailTokensTest {
                         "testtoken:1",
                         "testtoken:0")));
     }
+
+    @Test
+    public void testTamperedTimeToken3() {      
+        Long maxVal = Long.MAX_VALUE;
+        assertNull("token with a changed time causing an overflow must be null",
+                signer.verifyToken("testtoken:" + maxVal + ":sadRkftPRiBhl1eXrgUwDFwYOfwm-Zkdg_ubOABkVXM"));
+    } 
 
     @Test
     public void testTamperedMessageToken() {
