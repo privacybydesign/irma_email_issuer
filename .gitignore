@@ -12,6 +12,7 @@ webapp/build
 .settings/
 bin/
 artifacts/
+.DS_Store
 
 !src/main/webapp/WEB-INF
 src/main/webapp/*
