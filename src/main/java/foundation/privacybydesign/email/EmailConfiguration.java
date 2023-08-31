@@ -109,6 +109,10 @@ public class EmailConfiguration extends BaseConfiguration<EmailConfiguration> {
     public SignatureAlgorithm getJwtAlgorithm() { return SignatureAlgorithm.RS256; }
 
     public Client getClient(String token) {
+        if (clients == null || !clients.containsKey(token)) {
+            return null;
+        }
+        
         return clients.get(token);
     }
 

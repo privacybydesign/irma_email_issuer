@@ -22,5 +22,19 @@
   "email_issuer": "sidn-pbdf",
   "email_credential": "email",
   "email_attribute": "email",
-  "domain_attribute": "domain"
+  "domain_attribute": "domain",
+  "clients" : {
+    "customclient": {
+      "return_url": "",
+      "reply_to_email": "",
+      "name": "A custom client",
+      "email_files": {
+        "nl": "customclient-nl.html",
+        "en": "customclient-en.html"
+      },
+      "email_subject": {
+        "en": "Add email address to your Yivi app",
+        "nl": "Voeg e-mailadres toe aan je Yivi-app"
+      }
+  }}
 }
