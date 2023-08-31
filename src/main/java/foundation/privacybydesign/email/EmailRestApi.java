@@ -8,8 +8,12 @@ import org.irmacard.credentials.info.CredentialIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import foundation.privacybydesign.email.ratelimit.MemoryRateLimit;
+import foundation.privacybydesign.email.ratelimit.RateLimit;
 import jakarta.mail.internet.AddressException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
@@ -26,11 +30,14 @@ import java.util.HashMap;
 @Path("")
 public class EmailRestApi {
     private static Logger logger = LoggerFactory.getLogger(EmailRestApi.class);
+    private static RateLimit rateLimiter = MemoryRateLimit.getInstance();
 
     private static final String ERR_ADDRESS_MALFORMED = "error:email-address-malformed";
     private static final String ERR_INVALID_TOKEN = "error:invalid-token";
     private static final String ERR_INVALID_LANG = "error:invalid-language";
     private static final String OK_RESPONSE = "OK"; // value doesn't really matter
+    private static final String PROXY_IP_HEADER = "X-Real-IP";
+    private static final String ERR_RATE_LIMITED = "error:ratelimit";
 
     private EmailTokens signer;
 
@@ -42,7 +49,8 @@ public class EmailRestApi {
     @POST
     @Path("/send-email")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response sendEmail(@FormParam("email") String email,
+    public Response sendEmail(@Context HttpServletRequest req,
+                              @FormParam("email") String email,
                               @FormParam("language") String lang,
                               @HeaderParam("Authorization") String auth) {
         EmailConfiguration conf = EmailConfiguration.getInstance();
@@ -58,8 +66,24 @@ public class EmailRestApi {
             return Response.status(Response.Status.BAD_REQUEST).entity(ERR_ADDRESS_MALFORMED).build();
         }
 
-        String token = signer.createToken(email);
         try {
+            String ip = req.getHeader(PROXY_IP_HEADER);
+            if (ip == null) {
+                ip = req.getRemoteAddr();
+            }
+
+            long retryAfter = rateLimiter.rateLimited(ip, email);
+            if (retryAfter > 0) {
+                // 429 Too Many Requests
+                // https://tools.ietf.org/html/rfc6585#section-4
+                return Response.status(429)
+                        .entity(ERR_RATE_LIMITED)
+                        .header("Retry-After", (int) Math.ceil(retryAfter / 1000.0))
+                        .build();
+            }
+
+            String token = signer.createToken(email);
+
             String url = conf.getServerURL(lang) + "#verify-email/" + token
                     + "/" + URLEncoder.encode(client.getReturnURL(), StandardCharsets.UTF_8.toString());
             EmailSender.send(
@@ -93,7 +117,8 @@ public class EmailRestApi {
     @POST
     @Path("/send-email-token")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response sendEmailToken(@FormParam("email") String emailAddress,
+    public Response sendEmailToken(@Context HttpServletRequest req,
+                                   @FormParam("email") String emailAddress,
                                    @FormParam("language") String language) {
         EmailConfiguration conf = EmailConfiguration.getInstance();
 
@@ -101,6 +126,21 @@ public class EmailRestApi {
         if (!emailAddress.equals(emailAddress.toLowerCase())) {
             logger.error("Address contains uppercase characters");
             return Response.status(Response.Status.BAD_REQUEST).entity(ERR_ADDRESS_MALFORMED).build();
+        }
+
+        String ip = req.getHeader(PROXY_IP_HEADER);
+        if (ip == null) {
+            ip = req.getRemoteAddr();
+        }
+
+        long retryAfter = rateLimiter.rateLimited(ip, emailAddress);
+        if (retryAfter > 0) {
+            // 429 Too Many Requests
+            // https://tools.ietf.org/html/rfc6585#section-4
+            return Response.status(429)
+                    .entity(ERR_RATE_LIMITED)
+                    .header("Retry-After", (int) Math.ceil(retryAfter / 1000.0))
+                    .build();
         }
 
         // Test email with signature
