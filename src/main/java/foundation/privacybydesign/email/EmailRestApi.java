@@ -1,7 +1,5 @@
 package foundation.privacybydesign.email;
 
-import foundation.privacybydesign.common.email.EmailTokens;
-import foundation.privacybydesign.common.filters.RateLimit;
 import org.irmacard.api.common.ApiClient;
 import org.irmacard.api.common.CredentialRequest;
 import org.irmacard.api.common.issuing.IdentityProviderRequest;
@@ -10,10 +8,12 @@ import org.irmacard.credentials.info.CredentialIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.mail.internet.AddressException;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import foundation.privacybydesign.email.ratelimit.MemoryRateLimit;
+import foundation.privacybydesign.email.ratelimit.RateLimit;
+import jakarta.mail.internet.AddressException;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -28,11 +28,13 @@ import java.util.HashMap;
 @Path("")
 public class EmailRestApi {
     private static Logger logger = LoggerFactory.getLogger(EmailRestApi.class);
+    private static RateLimit rateLimiter = MemoryRateLimit.getInstance();
 
     private static final String ERR_ADDRESS_MALFORMED = "error:email-address-malformed";
     private static final String ERR_INVALID_TOKEN = "error:invalid-token";
     private static final String ERR_INVALID_LANG = "error:invalid-language";
     private static final String OK_RESPONSE = "OK"; // value doesn't really matter
+    private static final String ERR_RATE_LIMITED = "error:ratelimit";
 
     private EmailTokens signer;
 
@@ -52,17 +54,28 @@ public class EmailRestApi {
         if (client == null)
             return Response.status(Response.Status.UNAUTHORIZED).build();
 
-        if (lang == null || lang.length() == 0)
-            lang = EmailConfiguration.getInstance().getDefaultLanguage();
-
+        lang = parseLanguage(lang);
+     
         // We only accept lowercase email addresses.
         if (!email.equals(email.toLowerCase())) {
             logger.error("Address contains uppercase characters");
             return Response.status(Response.Status.BAD_REQUEST).entity(ERR_ADDRESS_MALFORMED).build();
         }
 
-        String token = signer.createToken(email);
         try {
+
+            long retryAfter = rateLimiter.rateLimited(email);
+            if (retryAfter > 0) {
+                // 429 Too Many Requests
+                // https://tools.ietf.org/html/rfc6585#section-4
+                return Response.status(429)
+                        .entity(ERR_RATE_LIMITED)
+                        .header("Retry-After", (int) Math.ceil(retryAfter / 1000.0))
+                        .build();
+            }
+
+            String token = signer.createToken(email);
+
             String url = conf.getServerURL(lang) + "#verify-email/" + token
                     + "/" + URLEncoder.encode(client.getReturnURL(), StandardCharsets.UTF_8.toString());
             EmailSender.send(
@@ -79,6 +92,9 @@ public class EmailRestApi {
         } catch (UnsupportedEncodingException e) {
             logger.error("Invalid return URL: {}: {}", client.getReturnURL(), e.getMessage());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        } catch (Exception e) {
+            logger.error("Sending mail failed:\n{}", e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
         return Response.status(Response.Status.OK).entity(OK_RESPONSE).build();
     }
@@ -93,7 +109,6 @@ public class EmailRestApi {
     @POST
     @Path("/send-email-token")
     @Produces(MediaType.TEXT_PLAIN)
-    @RateLimit
     public Response sendEmailToken(@FormParam("email") String emailAddress,
                                    @FormParam("language") String language) {
         EmailConfiguration conf = EmailConfiguration.getInstance();
@@ -104,11 +119,21 @@ public class EmailRestApi {
             return Response.status(Response.Status.BAD_REQUEST).entity(ERR_ADDRESS_MALFORMED).build();
         }
 
+        long retryAfter = rateLimiter.rateLimited(emailAddress);
+        if (retryAfter > 0) {
+            // 429 Too Many Requests
+            // https://tools.ietf.org/html/rfc6585#section-4
+            return Response.status(429)
+                    .entity(ERR_RATE_LIMITED)
+                    .header("Retry-After", (int) Math.ceil(retryAfter / 1000.0))
+                    .build();
+        }
+
         // Test email with signature
         String token = signer.createToken(emailAddress);
 
-        if (language == null || language.length() == 0)
-            language = EmailConfiguration.getInstance().getDefaultLanguage();
+        language = parseLanguage(language);
+
         String mailBodyTemplate = conf.getVerifyEmailBody(language);
         if (mailBodyTemplate == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity
@@ -128,6 +153,9 @@ public class EmailRestApi {
             logger.error("Invalid address: {}", e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity
                     (ERR_ADDRESS_MALFORMED).build();
+        } catch (Exception e) {
+            logger.error("Sending mail failed:\n{}", e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
         return Response.status(Response.Status.OK).entity
                 (OK_RESPONSE).build();
@@ -188,5 +216,22 @@ public class EmailRestApi {
                 conf.getPrivateKey());
         return Response.status(Response.Status.OK)
                 .entity(jwt).build();
+    }
+
+    /**
+     * Return a sanitized language code or the default language based on the given input
+     * 
+     * @param language the language code to sanitize
+     * @return String with language code
+     */
+    private String parseLanguage(String language){
+        if (language == null || language.length() == 0){
+            language = EmailConfiguration.getInstance().getDefaultLanguage();
+        }
+        else {
+            // Only allow letters in the language code to prevent path and other injection attacts
+            language = language.replaceAll("[^a-zA-Z]", "");
+        }
+        return language;
     }
 }

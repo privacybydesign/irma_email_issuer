@@ -1,7 +1,6 @@
 build/
 .gradle/
 src/main/resources/config.json
-src/main/resources/clientmails/*
 *.der
 *.pem
 node_modules
@@ -12,7 +11,9 @@ webapp/build
 .settings/
 bin/
 artifacts/
+.DS_Store
 
-!src/main/webapp/WEB-INF
 src/main/webapp/*
+!src/main/webapp/WEB-INF/
+
 .idea/

@@ -1,0 +1,61 @@
+version: "3.8"
+name: irma_email_issuer
+
+services:
+  # Irma issuer service
+  irmaserver:
+    image: ghcr.io/privacybydesign/irma:v0.13.2
+    working_dir: /irmago
+    ports:
+      - 8088:8088
+    expose:
+      - 8088
+    networks:
+      - irma-net
+    entrypoint:
+      - "irma"
+      - "server"
+      - "--no-auth=false"
+      - "--requestors={\"irma_email_issuer\":{\"auth_method\":\"publickey\",\"key_file\": \"/config/pk.pem\"} }"
+      - "--port=8088"
+      - "--jwt-privkey-file=/config/sk.pem"
+      - "--url=http://${IP}:8088"
+    volumes:
+      - ./src/main/resources/:/config/
+
+  # Mailhog service
+  mailhog:
+    image: mailhog/mailhog
+    networks:
+      # We use a localhost alias such that the test configuration also works for users who run it without Docker.
+      irma-net:
+        aliases:
+          - mailhog.localhost
+    ports:
+      - 1025:1025
+      - 8025:8025 # Port of the web interface
+
+  # Service that runs the SMS issuer webapp and api
+  irma_email_issuer:
+      platform: linux/x86_64
+      build:
+        context: .
+        dockerfile: Dockerfile
+      volumes:
+        # Make keys and config files available for Java app
+        - ./src/main/resources/:/config/
+        # Make config.js available for webapp
+        - ./webapp/config.example.js:/usr/local/tomee/webapps/ROOT/assets/config.js:ro"
+      ports:
+        - 8080:8080
+      expose:
+        - 8080
+      networks:
+        - irma-net
+
+# Docker Desktop for MacOS does not support exposing ports when using host networking. Therefore,
+# we have to use bridge networking and expose the ports manually.
+# https://github.com/docker/for-mac/issues/1031
+networks:
+  irma-net:
+    driver: bridge

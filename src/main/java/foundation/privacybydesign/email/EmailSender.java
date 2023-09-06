@@ -1,12 +1,8 @@
 package foundation.privacybydesign.email;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Properties;
-import javax.mail.*;
-import javax.mail.internet.*;
-
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
 
 /**
  * Simple class to send emails. Mail host/port/auth is configured in
@@ -15,7 +11,6 @@ import javax.mail.internet.*;
  * TODO: join this with org.irmacard.keyshare.web.email.EmailSender
  */
 public class EmailSender {
-    private static Logger logger = LoggerFactory.getLogger(EmailSender.class);
 
     /**
      * Send an email using a configured SMTP server.
@@ -25,11 +20,11 @@ public class EmailSender {
      * @param body Email text body
      * @throws AddressException
      */
-    public static void send(String toAddresses, String subject, String body) throws AddressException {
+    public static void send(String toAddresses, String subject, String body) throws AddressException, MessagingException {
         send(toAddresses, subject, body, null, false);
     }
 
-    public static void send(String toAddresses, String subject, String body, String replyto, boolean html, Object... o) throws AddressException{
+    public static void send(String toAddresses, String subject, String body, String replyto, boolean html, Object... o) throws AddressException, MessagingException{
         InternetAddress[] addresses = InternetAddress.parse(toAddresses);
         if (addresses.length != 1)
             throw new AddressException("Invalid amount of (comma-separated) addresses given (should be 1)");
@@ -57,29 +52,22 @@ public class EmailSender {
             session = Session.getInstance(props);
         }
 
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(EmailConfiguration.getInstance().getMailFrom()));
-            message.setRecipients(Message.RecipientType.TO, addresses);
-            message.setSubject(subject);
-            if (replyto != null && replyto.length() > 0)
-                message.setReplyTo(new Address[]{new InternetAddress(replyto)});
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(EmailConfiguration.getInstance().getMailFrom()));
+        message.setRecipients(Message.RecipientType.TO, addresses);
+        message.setSubject(subject);
+        if (replyto != null && replyto.length() > 0)
+            message.setReplyTo(new Address[]{new InternetAddress(replyto)});
 
-            if (o != null && o.length > 0)
-                body = String.format(body, o);
+        if (o != null && o.length > 0)
+            body = String.format(body, o);
 
-            if (html) {
-                MimeBodyPart messageBodyPart = new MimeBodyPart();
-                messageBodyPart.setContent(body, "text/html");
-                Multipart multipart = new MimeMultipart();
-                multipart.addBodyPart(messageBodyPart);
-                message.setContent(multipart);
-            } else {
-                message.setText(body);
-            }
-            Transport.send(message);
-        } catch (MessagingException e) {
-            logger.error("Sending mail failed:\n{}", e.getMessage());
+        if (html) {
+            message.setContent(body, "text/html");
+        } else {
+            message.setText(body);
         }
+
+        Transport.send(message);
     }
 }
