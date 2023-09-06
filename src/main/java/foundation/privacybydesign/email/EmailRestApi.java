@@ -11,9 +11,7 @@ import org.slf4j.LoggerFactory;
 import foundation.privacybydesign.email.ratelimit.MemoryRateLimit;
 import foundation.privacybydesign.email.ratelimit.RateLimit;
 import jakarta.mail.internet.AddressException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
@@ -48,8 +46,7 @@ public class EmailRestApi {
     @POST
     @Path("/send-email")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response sendEmail(@Context HttpServletRequest req,
-                              @FormParam("email") String email,
+    public Response sendEmail(@FormParam("email") String email,
                               @FormParam("language") String lang,
                               @HeaderParam("Authorization") String auth) {
         EmailConfiguration conf = EmailConfiguration.getInstance();
@@ -112,8 +109,7 @@ public class EmailRestApi {
     @POST
     @Path("/send-email-token")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response sendEmailToken(@Context HttpServletRequest req,
-                                   @FormParam("email") String emailAddress,
+    public Response sendEmailToken(@FormParam("email") String emailAddress,
                                    @FormParam("language") String language) {
         EmailConfiguration conf = EmailConfiguration.getInstance();
 
