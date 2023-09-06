@@ -80,14 +80,46 @@ function addEmail(e) {
             $('#email-form input').prop('disabled', false).val('');
         })
         .fail(function(e) {
-            // Address format problem?
-            setStatus('danger', MESSAGES[e.responseText] || MESSAGES['unknown-problem']);
+            var errormsg = e.responseText;
+            console.error('failed to submit email address:', errormsg);
+
+            if (!errormsg || !MESSAGES[errormsg]) {
+                errormsg = 'error:internal';
+            }
+
+            if (errormsg == 'error:ratelimit') {
+                var retryAfter = e.getResponseHeader('Retry-After');
+ 
+                // In JavaScript, we can mostly ignore the fact we're dealing
+                // with a string here and treat it as an integer...
+                if (retryAfter < 60) {
+                    var timemsg = MESSAGES['seconds'];
+                    if (retryAfter == 1) {
+                        var timemsg = MESSAGES['second'];
+                    }
+                } else if (retryAfter < 60*60) {
+                    retryAfter = Math.round(retryAfter / 60);
+                    var timemsg = MESSAGES['minutes'];
+                    if (retryAfter == 1) {
+                        var timemsg = MESSAGES['minute'];
+                    }
+                } else {
+                    retryAfter = Math.round(retryAfter / 60 / 60);
+                    var timemsg = MESSAGES['hours'];
+                    if (retryAfter == 1) {
+                        var timemsg = MESSAGES['hour'];
+                    }
+                }
+                setStatus('danger', MESSAGES[errormsg].replace('%time%',
+                    timemsg.replace('%n%', retryAfter)));
+            } else {
+                setStatus('danger', MESSAGES[errormsg]);
+            }
+
             setWindow('email-add');
 
             // Make editable again
             $('#email-form input').prop('disabled', false);
-
-            console.error('fail', e.responseText);
         });
 }
 

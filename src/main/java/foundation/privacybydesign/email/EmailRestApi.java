@@ -8,6 +8,8 @@ import org.irmacard.credentials.info.CredentialIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import foundation.privacybydesign.email.ratelimit.MemoryRateLimit;
+import foundation.privacybydesign.email.ratelimit.RateLimit;
 import jakarta.mail.internet.AddressException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -26,11 +28,13 @@ import java.util.HashMap;
 @Path("")
 public class EmailRestApi {
     private static Logger logger = LoggerFactory.getLogger(EmailRestApi.class);
+    private static RateLimit rateLimiter = MemoryRateLimit.getInstance();
 
     private static final String ERR_ADDRESS_MALFORMED = "error:email-address-malformed";
     private static final String ERR_INVALID_TOKEN = "error:invalid-token";
     private static final String ERR_INVALID_LANG = "error:invalid-language";
     private static final String OK_RESPONSE = "OK"; // value doesn't really matter
+    private static final String ERR_RATE_LIMITED = "error:ratelimit";
 
     private EmailTokens signer;
 
@@ -58,8 +62,20 @@ public class EmailRestApi {
             return Response.status(Response.Status.BAD_REQUEST).entity(ERR_ADDRESS_MALFORMED).build();
         }
 
-        String token = signer.createToken(email);
         try {
+
+            long retryAfter = rateLimiter.rateLimited(email);
+            if (retryAfter > 0) {
+                // 429 Too Many Requests
+                // https://tools.ietf.org/html/rfc6585#section-4
+                return Response.status(429)
+                        .entity(ERR_RATE_LIMITED)
+                        .header("Retry-After", (int) Math.ceil(retryAfter / 1000.0))
+                        .build();
+            }
+
+            String token = signer.createToken(email);
+
             String url = conf.getServerURL(lang) + "#verify-email/" + token
                     + "/" + URLEncoder.encode(client.getReturnURL(), StandardCharsets.UTF_8.toString());
             EmailSender.send(
@@ -101,6 +117,16 @@ public class EmailRestApi {
         if (!emailAddress.equals(emailAddress.toLowerCase())) {
             logger.error("Address contains uppercase characters");
             return Response.status(Response.Status.BAD_REQUEST).entity(ERR_ADDRESS_MALFORMED).build();
+        }
+
+        long retryAfter = rateLimiter.rateLimited(emailAddress);
+        if (retryAfter > 0) {
+            // 429 Too Many Requests
+            // https://tools.ietf.org/html/rfc6585#section-4
+            return Response.status(429)
+                    .entity(ERR_RATE_LIMITED)
+                    .header("Retry-After", (int) Math.ceil(retryAfter / 1000.0))
+                    .build();
         }
 
         // Test email with signature
