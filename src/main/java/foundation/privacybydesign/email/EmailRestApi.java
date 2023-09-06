@@ -36,7 +36,6 @@ public class EmailRestApi {
     private static final String ERR_INVALID_TOKEN = "error:invalid-token";
     private static final String ERR_INVALID_LANG = "error:invalid-language";
     private static final String OK_RESPONSE = "OK"; // value doesn't really matter
-    private static final String PROXY_IP_HEADER = "X-Real-IP";
     private static final String ERR_RATE_LIMITED = "error:ratelimit";
 
     private EmailTokens signer;
@@ -67,12 +66,8 @@ public class EmailRestApi {
         }
 
         try {
-            String ip = req.getHeader(PROXY_IP_HEADER);
-            if (ip == null) {
-                ip = req.getRemoteAddr();
-            }
 
-            long retryAfter = rateLimiter.rateLimited(ip, email);
+            long retryAfter = rateLimiter.rateLimited(email);
             if (retryAfter > 0) {
                 // 429 Too Many Requests
                 // https://tools.ietf.org/html/rfc6585#section-4
@@ -128,12 +123,7 @@ public class EmailRestApi {
             return Response.status(Response.Status.BAD_REQUEST).entity(ERR_ADDRESS_MALFORMED).build();
         }
 
-        String ip = req.getHeader(PROXY_IP_HEADER);
-        if (ip == null) {
-            ip = req.getRemoteAddr();
-        }
-
-        long retryAfter = rateLimiter.rateLimited(ip, emailAddress);
+        long retryAfter = rateLimiter.rateLimited(emailAddress);
         if (retryAfter > 0) {
             // 429 Too Many Requests
             // https://tools.ietf.org/html/rfc6585#section-4
