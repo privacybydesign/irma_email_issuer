@@ -1,6 +1,6 @@
 {
   "verify_email_subject": {
-    "en": "Add email address to your Yivi app",
+    "en": "Add e-mail address to your Yivi app",
     "nl": "Voeg e-mailadres toe aan je Yivi-app"
   },
   "server_url": {
@@ -33,7 +33,7 @@
         "en": "customclient-en.html"
       },
       "email_subject": {
-        "en": "Add email address to your Yivi app",
+        "en": "Add e-mail address to your Yivi app",
         "nl": "Voeg e-mailadres toe aan je Yivi-app"
       }
   }}
