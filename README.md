@@ -1,7 +1,7 @@
 
 # irma_email_issuer
 
-Add an email address for use in your [Yivi app](https://github.com/privacybydesign/irmamobile).
+Add an e-mail address for use in your [Yivi app](https://github.com/privacybydesign/irmamobile).
 
 ## Running (development)
 The easiest way to run the irma_email_issuer for development purposes is via Docker.
