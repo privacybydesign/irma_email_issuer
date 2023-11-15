@@ -41,6 +41,8 @@ public class EmailSender {
         Session session;
         if (EmailConfiguration.getInstance().getMailUser().length() > 0) {
             props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.ssl.checkserveridentity", "true");
+            
             session = Session.getInstance(props, new Authenticator() {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
