@@ -31,4 +31,4 @@ COPY --from=javabuild /app/build/libs/irma_email_issuer-1.1.0.war /usr/local/tom
 EXPOSE 8080
 
 # Copy the config file to the webapp. This is done at runtime so that the config file can be mounted as a volume.
-CMD [ "/bin/sh", "-c", "for lang in 'en' 'nl'; do cp /config/config.js /usr/local/tomee/webapps/ROOT/$lang/assets/config.js; done && catalina.sh run" ]
+CMD [ "/bin/sh", "-c", "for lang in 'en' 'nl'; do cp /config/config.js /usr/local/tomee/webapps/ROOT/$lang/assets/config.js; done && exec catalina.sh run" ]
