@@ -29,6 +29,8 @@ By default, docker-compose caches docker images, so on a second run the previous
 $ IP=192.168.1.105 docker-compose up --build
 ```
 
+The configuration should be mounted in the `/config` directory of the container. The `docker-compose.yml` file already contains this configuration.
+
 ## Manual
 The Java api and JavaScript frontend can be built and run manually using the following commands:
 
