@@ -4,8 +4,8 @@
     "nl": "Voeg e-mailadres toe aan je Yivi-app"
   },
   "server_url": {
-    "en": "http://localhost:8080",
-    "nl": "http://localhost:8080"
+    "en": "http://localhost:8080/en/",
+    "nl": "http://localhost:8080/nl/"
   },
   "mail_host": "mailhog.localhost",
   "mail_port": 1025,
