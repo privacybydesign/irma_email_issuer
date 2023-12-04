@@ -26,8 +26,9 @@ RUN rm -rf /usr/local/tomee/webapps/ROOT
 COPY --from=webappbuild /www/ /usr/local/tomee/webapps/ROOT/
 
 # Copy the war file to the webapps directory
-COPY --from=javabuild /app/build/libs/irma_email_issuer-1.1.0.war /usr/local/tomee/webapps/
+COPY --from=javabuild /app/build/libs/irma_email_issuer.war /usr/local/tomee/webapps/
 
+ENV IRMA_CONF="/config/"
 EXPOSE 8080
 
 # Copy the config file to the webapp. This is done at runtime so that the config file can be mounted as a volume.

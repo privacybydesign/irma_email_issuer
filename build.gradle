@@ -17,6 +17,10 @@ buildscript {
     }
 }
 
+war {
+    archiveName 'irma_email_issuer.war'
+}
+
 repositories {
     maven {
         url "https://credentials.github.io/repos/maven2/"
