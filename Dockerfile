@@ -19,10 +19,10 @@ COPY ./ /app/
 WORKDIR /app
 RUN gradle build
 
-FROM tomee:9.0-jre11
+FROM tomee:9.1-jre11
 
 # Copy the webapp to the webapps directory
-RUN rm -rf /usr/local/tomee/webapps/ROOT
+RUN rm -rf /usr/local/tomee/webapps/*
 COPY --from=webappbuild /www/ /usr/local/tomee/webapps/ROOT/
 
 # Copy the war file to the webapps directory
