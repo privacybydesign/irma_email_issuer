@@ -28,6 +28,8 @@ public class BaseConfiguration<T> {
     public static String filename = "config.json";
     public static String environmentVarPrefix = "IRMA_CONF_";
     public static String confDirEnvironmentVarName = "IRMA_CONF";
+    public static String emailTemplateDirVarName = "EMAIL_TEMPLATE_DIR";
+    public static String emailTemplateDir;
     public static String confDirName;
     public static boolean printOnLoad = false;
     public static boolean testing = false;
@@ -66,6 +68,17 @@ public class BaseConfiguration<T> {
 
     public static byte[] getResource(String filename) throws IOException {
         return convertStreamToByteArray(getResourceStream(filename), 2048);
+    }
+
+    public static byte[] getEmailTemplate(String filename) throws IOException {
+        try {
+            return convertStreamToByteArray(new FileInputStream(new File(getEnvironmentVariableTemplateDir().resolve(filename))), 2048);
+        } catch (URISyntaxException e) {
+            logger.error("Invalid URI for email template (" + filename + "): " + e.getMessage());
+            logger.error("Terminating now");
+            System.exit(-1);
+        }
+        return new byte[]{};
     }
 
     public static byte[] convertStreamToByteArray(InputStream stream, int size) throws IOException {
@@ -206,6 +219,13 @@ public class BaseConfiguration<T> {
      */
     public static URI getEnvironmentVariableConfDir() throws URISyntaxException {
         String envDir = System.getenv(confDirEnvironmentVarName);
+        if (envDir == null || envDir.length() == 0)
+            return null;
+        return pathToURI(envDir, true);
+    }
+
+    public static URI getEnvironmentVariableTemplateDir() throws URISyntaxException {
+        String envDir = System.getenv(emailTemplateDirVarName);
         if (envDir == null || envDir.length() == 0)
             return null;
         return pathToURI(envDir, true);
