@@ -71,14 +71,7 @@ public class BaseConfiguration<T> {
     }
 
     public static byte[] getEmailTemplate(String filename) throws IOException {
-        try {
-            return convertStreamToByteArray(new FileInputStream(new File(getEnvironmentVariableTemplateDir().resolve(filename))), 2048);
-        } catch (URISyntaxException e) {
-            logger.error("Invalid URI for email template (" + filename + "): " + e.getMessage());
-            logger.error("Terminating now");
-            System.exit(-1);
-        }
-        return new byte[]{};
+        return convertStreamToByteArray(new FileInputStream(new File(getTemplateDirectory().resolve(filename))), 2048);
     }
 
     public static byte[] convertStreamToByteArray(InputStream stream, int size) throws IOException {
@@ -230,6 +223,64 @@ public class BaseConfiguration<T> {
             return null;
         return pathToURI(envDir, true);
     }
+
+
+    public static URI getTemplateDirectory() throws IllegalStateException, IllegalArgumentException {
+        if (confPath != null)
+            return confPath;
+
+        try {
+            // If we're running unit tests, only accept src/test/resources
+            URI resourcesCandidate = GetJavaResourcesDirectory();
+            if (BaseConfiguration.testing) {
+                if (resourcesCandidate != null) {
+                    logger.info("Running tests: taking src/test/resources as configuration directory");
+                    confPath = resourcesCandidate;
+                    return confPath;
+                }
+                else {
+                    throw new IllegalStateException("No configuration found in in src/test/resources. " +
+                            "(Have you run `git submodule init && git submodule update`?)");
+                }
+            }
+
+            // If a path was given in the $confDirEnvironmentVarName environment variable, prefer it
+            URI envCandidate = getEnvironmentVariableTemplateDir();
+            if (envCandidate != null) {
+                if (isConfDirectory(envCandidate)) {
+                    logger.info("Taking template directory specified by environment variable " + emailTemplateDirVarName);
+                    confPath = envCandidate;
+                    return confPath;
+                } else {
+                    // If the user specified an incorrect path (s)he will want to know, so bail out here
+                    throw new IllegalArgumentException("Specified path in " + emailTemplateDirVarName
+                            + " is not a valid configuration directory");
+                }
+            }
+
+            // See if a number of other fixed candidates are suitable
+            ArrayList<URI> candidates = new ArrayList<>(4);
+            candidates.add(resourcesCandidate);
+            if (confDirName != null) {
+                candidates.add(pathToURI("/etc/" + confDirName, true));
+                candidates.add(pathToURI("C:/" + confDirName, true));
+                candidates.add(pathToURI(System.getProperty("user.home")+"/"+confDirName, true));
+            }
+
+            for (URI candidate : candidates) {
+                if (isConfDirectory(candidate)) {
+                    confPath = candidate;
+                    return confPath;
+                }
+            }
+
+            throw new IllegalStateException("No valid template directory found");
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+
 
     /**
      * Returns true if the specified path is a valid configuration directory. A directory
