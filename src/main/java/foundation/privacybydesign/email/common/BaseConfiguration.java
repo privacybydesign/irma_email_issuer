@@ -77,6 +77,7 @@ public class BaseConfiguration<T> {
     public static FileInputStream getEmailTemplateStream(String filename) throws IOException {
         validateFilename(filename);
         Path resolvedPath = resolvePath(getTemplateDirectory(), filename);
+        logger.info("trying to load: " + resolvedPath.toString());
         return new FileInputStream(resolvedPath.toFile());
     }
 
