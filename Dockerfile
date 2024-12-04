@@ -27,6 +27,8 @@ COPY --from=webappbuild /www/ /usr/local/tomee/webapps/ROOT/
 
 # Copy the war file to the webapps directory
 COPY --from=javabuild /app/build/libs/irma_email_issuer.war /usr/local/tomee/webapps/
+COPY ./src/main/resources/email-en.html /config
+COPY ./src/main/resources/email-nl.html /config
 
 ENV IRMA_CONF="/config/"
 EXPOSE 8080
