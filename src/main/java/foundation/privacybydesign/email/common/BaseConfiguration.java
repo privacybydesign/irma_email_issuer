@@ -21,13 +21,12 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class BaseConfiguration<T> {
     // Override these in a static {} block
     public static Class<? extends BaseConfiguration<?>> clazz;
     public static Logger logger = LoggerFactory.getLogger(BaseConfiguration.class);
-    public static String filename = "config.json";
+    public static String configFileName = "config.json";
     public static String environmentVarPrefix = "IRMA_CONF_";
     public static String confDirEnvironmentVarName = "IRMA_CONF";
     public static String emailTemplateDirVarName = "EMAIL_TEMPLATE_DIR";
@@ -45,7 +44,7 @@ public class BaseConfiguration<T> {
 
     public static void load() {
         try {
-            String json = new String(getResource(filename));
+            String json = new String(getResource(configFileName));
             instance = GsonUtil.getGson().fromJson(json, clazz);
             logger.info("Using configuration directory: " + BaseConfiguration.getConfigurationDirectory().toString());
         } catch (IOException|JsonSyntaxException e) {
@@ -250,30 +249,13 @@ public class BaseConfiguration<T> {
         return pathToURI(envDir, true);
     }
 
-
     public static URI getTemplateDirectory() throws IllegalStateException, IllegalArgumentException {
         if (templatePath != null)
             return templatePath;
-
         try {
-            // If we're running unit tests, only accept src/test/resources
-            URI resourcesCandidate = GetJavaResourcesDirectory();
-            if (BaseConfiguration.testing) {
-                if (resourcesCandidate != null) {
-                    logger.info("Running tests: taking src/test/resources as configuration directory");
-                    templatePath = resourcesCandidate;
-                    return templatePath;
-                }
-                else {
-                    throw new IllegalStateException("No configuration found in in src/test/resources. " +
-                            "(Have you run `git submodule init && git submodule update`?)");
-                }
-            }
-
-            // If a path was given in the $confDirEnvironmentVarName environment variable, prefer it
             URI envCandidate = getEnvironmentVariableTemplateDir();
             if (envCandidate != null) {
-                if (isConfDirectory(envCandidate, "email-en.html")) {
+                if (isEmailTemplateDirectory(envCandidate)) {
                     logger.info("Taking template directory specified by environment variable " + emailTemplateDirVarName);
                     templatePath = envCandidate;
                     return templatePath;
@@ -283,37 +265,22 @@ public class BaseConfiguration<T> {
                             + " is not a valid configuration directory");
                 }
             }
-
-            // See if a number of other fixed candidates are suitable
-            ArrayList<URI> candidates = new ArrayList<>(4);
-            candidates.add(resourcesCandidate);
-            if (templatefDirName != null) {
-                candidates.add(pathToURI("/etc/" + templatefDirName, true));
-                candidates.add(pathToURI("C:/" + templatefDirName, true));
-                candidates.add(pathToURI(System.getProperty("user.home")+"/"+templatefDirName, true));
-            }
-
-            for (URI candidate : candidates) {
-                if (isConfDirectory(candidate, "email-en.txt")) {
-                    templatePath = candidate;
-                    return templatePath;
-                }
-            }
-
             throw new IllegalStateException("No valid template directory found");
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
         }
     }
 
-
-
     /**
      * Returns true if the specified path is a valid configuration directory. A directory
      * is considered a valid configuration directory if it contains a file called $filename.
      */
-    public static boolean isConfDirectory(URI candidate, String filename) {
-        return candidate != null && new File(candidate.resolve(filename)).isFile();
+    public static boolean isConfDirectory(URI candidate) {
+        return candidate != null && new File(candidate.resolve(configFileName)).isFile();
+    }
+
+    public static boolean isEmailTemplateDirectory(URI candidate) {
+        return candidate != null && new File(candidate.resolve("email-en.html")).isFile();
     }
 
     /**
@@ -325,7 +292,7 @@ public class BaseConfiguration<T> {
         // seems to be to ask for an existing file or directory within the resources. That is,
         // BaseConfiguration.class.getClassLoader().getResource("/") or variants thereof
         // give an incorrect path.
-        String testfile = BaseConfiguration.testing ? "config.test.json" : filename;
+        String testfile = BaseConfiguration.testing ? "config.test.json" : configFileName;
         URL url = BaseConfiguration.class.getClassLoader().getResource(testfile);
         if (url != null) // Construct an URI of the parent path
             return pathToURI(new File(url.getPath()).getParent(), true);
@@ -374,7 +341,7 @@ public class BaseConfiguration<T> {
             // If a path was given in the $confDirEnvironmentVarName environment variable, prefer it
             URI envCandidate = getEnvironmentVariableConfDir();
             if (envCandidate != null) {
-                if (isConfDirectory(envCandidate, filename)) {
+                if (isConfDirectory(envCandidate)) {
                     logger.info("Taking configuration directory specified by environment variable " + confDirEnvironmentVarName);
                     confPath = envCandidate;
                     return confPath;
@@ -395,7 +362,7 @@ public class BaseConfiguration<T> {
             }
 
             for (URI candidate : candidates) {
-                if (isConfDirectory(candidate, filename)) {
+                if (isConfDirectory(candidate)) {
                     confPath = candidate;
                     return confPath;
                 }
