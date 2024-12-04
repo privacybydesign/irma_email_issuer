@@ -232,8 +232,8 @@ public class BaseConfiguration<T> {
 
 
     public static URI getTemplateDirectory() throws IllegalStateException, IllegalArgumentException {
-        if (confPath != null)
-            return confPath;
+        if (templatePath != null)
+            return templatePath;
 
         try {
             // If we're running unit tests, only accept src/test/resources
