@@ -20,6 +20,8 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class BaseConfiguration<T> {
     // Override these in a static {} block
@@ -73,7 +75,24 @@ public class BaseConfiguration<T> {
     }
 
     public static FileInputStream getEmailTemplateStream(String filename) throws IOException {
-        return new FileInputStream(new File(getTemplateDirectory().resolve(filename)));
+        validateFilename(filename);
+        Path resolvedPath = resolvePath(getTemplateDirectory(), filename);
+        return new FileInputStream(resolvedPath.toFile());
+    }
+
+    private static void validateFilename(String filename) {
+        if (filename == null || filename.isEmpty() || filename.contains("..")) {
+            throw new IllegalArgumentException("Invalid filename: " + filename);
+        }
+        // Optional: Add further filename validation, such as allowed extensions
+    }
+
+    private static Path resolvePath(URI baseDirectory, String filename) {
+        Path resolvedPath = new File(baseDirectory).toPath().resolve(filename).normalize();
+        if (!resolvedPath.startsWith(new File(baseDirectory).toPath())) {
+            throw new SecurityException("Path traversal attempt detected for file: " + filename);
+        }
+        return resolvedPath;
     }
 
     public static byte[] getEmailTemplate(String filename) throws IOException {
