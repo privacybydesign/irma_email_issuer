@@ -72,8 +72,12 @@ public class BaseConfiguration<T> {
         return convertStreamToByteArray(getResourceStream(filename), 2048);
     }
 
+    public static FileInputStream getEmailTemplateStream(String filename) throws IOException {
+        return new FileInputStream(new File(getTemplateDirectory().resolve(filename)));
+    }
+
     public static byte[] getEmailTemplate(String filename) throws IOException {
-        return convertStreamToByteArray(new FileInputStream(new File(getTemplateDirectory().resolve(filename))), 2048);
+        return convertStreamToByteArray(getEmailTemplateStream(filename), 2048);
     }
 
     public static byte[] convertStreamToByteArray(InputStream stream, int size) throws IOException {
