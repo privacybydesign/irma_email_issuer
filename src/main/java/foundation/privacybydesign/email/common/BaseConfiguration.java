@@ -273,7 +273,7 @@ public class BaseConfiguration<T> {
             // If a path was given in the $confDirEnvironmentVarName environment variable, prefer it
             URI envCandidate = getEnvironmentVariableTemplateDir();
             if (envCandidate != null) {
-                if (isConfDirectory(envCandidate)) {
+                if (isConfDirectory(envCandidate, "email-en.html")) {
                     logger.info("Taking template directory specified by environment variable " + emailTemplateDirVarName);
                     templatePath = envCandidate;
                     return templatePath;
@@ -294,7 +294,7 @@ public class BaseConfiguration<T> {
             }
 
             for (URI candidate : candidates) {
-                if (isConfDirectory(candidate)) {
+                if (isConfDirectory(candidate, "email-en.txt")) {
                     templatePath = candidate;
                     return templatePath;
                 }
@@ -312,7 +312,7 @@ public class BaseConfiguration<T> {
      * Returns true if the specified path is a valid configuration directory. A directory
      * is considered a valid configuration directory if it contains a file called $filename.
      */
-    public static boolean isConfDirectory(URI candidate) {
+    public static boolean isConfDirectory(URI candidate, String filename) {
         return candidate != null && new File(candidate.resolve(filename)).isFile();
     }
 
@@ -374,7 +374,7 @@ public class BaseConfiguration<T> {
             // If a path was given in the $confDirEnvironmentVarName environment variable, prefer it
             URI envCandidate = getEnvironmentVariableConfDir();
             if (envCandidate != null) {
-                if (isConfDirectory(envCandidate)) {
+                if (isConfDirectory(envCandidate, filename)) {
                     logger.info("Taking configuration directory specified by environment variable " + confDirEnvironmentVarName);
                     confPath = envCandidate;
                     return confPath;
@@ -395,7 +395,7 @@ public class BaseConfiguration<T> {
             }
 
             for (URI candidate : candidates) {
-                if (isConfDirectory(candidate)) {
+                if (isConfDirectory(candidate, filename)) {
                     confPath = candidate;
                     return confPath;
                 }
