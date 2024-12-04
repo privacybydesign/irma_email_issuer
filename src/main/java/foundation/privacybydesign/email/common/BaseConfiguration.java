@@ -31,12 +31,14 @@ public class BaseConfiguration<T> {
     public static String emailTemplateDirVarName = "EMAIL_TEMPLATE_DIR";
     public static String emailTemplateDir;
     public static String confDirName;
+    public static String templatefDirName;
     public static boolean printOnLoad = false;
     public static boolean testing = false;
 
     // Return this from a static getInstance()
     public static BaseConfiguration<?> instance;
     private static URI confPath;
+    private static URI templatePath;
 
 
     public static void load() {
@@ -235,8 +237,8 @@ public class BaseConfiguration<T> {
             if (BaseConfiguration.testing) {
                 if (resourcesCandidate != null) {
                     logger.info("Running tests: taking src/test/resources as configuration directory");
-                    confPath = resourcesCandidate;
-                    return confPath;
+                    templatePath = resourcesCandidate;
+                    return templatePath;
                 }
                 else {
                     throw new IllegalStateException("No configuration found in in src/test/resources. " +
@@ -249,8 +251,8 @@ public class BaseConfiguration<T> {
             if (envCandidate != null) {
                 if (isConfDirectory(envCandidate)) {
                     logger.info("Taking template directory specified by environment variable " + emailTemplateDirVarName);
-                    confPath = envCandidate;
-                    return confPath;
+                    templatePath = envCandidate;
+                    return templatePath;
                 } else {
                     // If the user specified an incorrect path (s)he will want to know, so bail out here
                     throw new IllegalArgumentException("Specified path in " + emailTemplateDirVarName
@@ -261,16 +263,16 @@ public class BaseConfiguration<T> {
             // See if a number of other fixed candidates are suitable
             ArrayList<URI> candidates = new ArrayList<>(4);
             candidates.add(resourcesCandidate);
-            if (confDirName != null) {
-                candidates.add(pathToURI("/etc/" + confDirName, true));
-                candidates.add(pathToURI("C:/" + confDirName, true));
-                candidates.add(pathToURI(System.getProperty("user.home")+"/"+confDirName, true));
+            if (templatefDirName != null) {
+                candidates.add(pathToURI("/etc/" + templatefDirName, true));
+                candidates.add(pathToURI("C:/" + templatefDirName, true));
+                candidates.add(pathToURI(System.getProperty("user.home")+"/"+templatefDirName, true));
             }
 
             for (URI candidate : candidates) {
                 if (isConfDirectory(candidate)) {
-                    confPath = candidate;
-                    return confPath;
+                    templatePath = candidate;
+                    return templatePath;
                 }
             }
 
