@@ -20,26 +20,31 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.nio.file.Path;
 
 public class BaseConfiguration<T> {
     // Override these in a static {} block
     public static Class<? extends BaseConfiguration<?>> clazz;
     public static Logger logger = LoggerFactory.getLogger(BaseConfiguration.class);
-    public static String filename = "config.json";
+    public static String configFileName = "config.json";
     public static String environmentVarPrefix = "IRMA_CONF_";
     public static String confDirEnvironmentVarName = "IRMA_CONF";
+    public static String emailTemplateDirVarName = "EMAIL_TEMPLATE_DIR";
+    public static String emailTemplateDir;
     public static String confDirName;
+    public static String templatefDirName;
     public static boolean printOnLoad = false;
     public static boolean testing = false;
 
     // Return this from a static getInstance()
     public static BaseConfiguration<?> instance;
     private static URI confPath;
+    private static URI templatePath;
 
 
     public static void load() {
         try {
-            String json = new String(getResource(filename));
+            String json = new String(getResource(configFileName));
             instance = GsonUtil.getGson().fromJson(json, clazz);
             logger.info("Using configuration directory: " + BaseConfiguration.getConfigurationDirectory().toString());
         } catch (IOException|JsonSyntaxException e) {
@@ -66,6 +71,32 @@ public class BaseConfiguration<T> {
 
     public static byte[] getResource(String filename) throws IOException {
         return convertStreamToByteArray(getResourceStream(filename), 2048);
+    }
+
+    public static FileInputStream getEmailTemplateStream(String filename) throws IOException {
+        validateFilename(filename);
+        Path resolvedPath = resolvePath(getTemplateDirectory(), filename);
+        logger.info("trying to load: " + resolvedPath.toString());
+        return new FileInputStream(resolvedPath.toFile());
+    }
+
+    private static void validateFilename(String filename) {
+        if (filename == null || filename.isEmpty() || filename.contains("..")) {
+            throw new IllegalArgumentException("Invalid filename: " + filename);
+        }
+        // Optional: Add further filename validation, such as allowed extensions
+    }
+
+    private static Path resolvePath(URI baseDirectory, String filename) {
+        Path resolvedPath = new File(baseDirectory).toPath().resolve(filename).normalize();
+        if (!resolvedPath.startsWith(new File(baseDirectory).toPath())) {
+            throw new SecurityException("Path traversal attempt detected for file: " + filename);
+        }
+        return resolvedPath;
+    }
+
+    public static byte[] getEmailTemplate(String filename) throws IOException {
+        return convertStreamToByteArray(getEmailTemplateStream(filename), 2048);
     }
 
     public static byte[] convertStreamToByteArray(InputStream stream, int size) throws IOException {
@@ -211,12 +242,45 @@ public class BaseConfiguration<T> {
         return pathToURI(envDir, true);
     }
 
+    public static URI getEnvironmentVariableTemplateDir() throws URISyntaxException {
+        String envDir = System.getenv(emailTemplateDirVarName);
+        if (envDir == null || envDir.length() == 0)
+            return null;
+        return pathToURI(envDir, true);
+    }
+
+    public static URI getTemplateDirectory() throws IllegalStateException, IllegalArgumentException {
+        if (templatePath != null)
+            return templatePath;
+        try {
+            URI envCandidate = getEnvironmentVariableTemplateDir();
+            if (envCandidate != null) {
+                if (isEmailTemplateDirectory(envCandidate)) {
+                    logger.info("Taking template directory specified by environment variable " + emailTemplateDirVarName);
+                    templatePath = envCandidate;
+                    return templatePath;
+                } else {
+                    // If the user specified an incorrect path (s)he will want to know, so bail out here
+                    throw new IllegalArgumentException("Specified path in " + emailTemplateDirVarName
+                            + " is not a valid configuration directory");
+                }
+            }
+            throw new IllegalStateException("No valid template directory found");
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
     /**
      * Returns true if the specified path is a valid configuration directory. A directory
      * is considered a valid configuration directory if it contains a file called $filename.
      */
     public static boolean isConfDirectory(URI candidate) {
-        return candidate != null && new File(candidate.resolve(filename)).isFile();
+        return candidate != null && new File(candidate.resolve(configFileName)).isFile();
+    }
+
+    public static boolean isEmailTemplateDirectory(URI candidate) {
+        return candidate != null && new File(candidate.resolve("email-en.html")).isFile();
     }
 
     /**
@@ -228,7 +292,7 @@ public class BaseConfiguration<T> {
         // seems to be to ask for an existing file or directory within the resources. That is,
         // BaseConfiguration.class.getClassLoader().getResource("/") or variants thereof
         // give an incorrect path.
-        String testfile = BaseConfiguration.testing ? "config.test.json" : filename;
+        String testfile = BaseConfiguration.testing ? "config.test.json" : configFileName;
         URL url = BaseConfiguration.class.getClassLoader().getResource(testfile);
         if (url != null) // Construct an URI of the parent path
             return pathToURI(new File(url.getPath()).getParent(), true);

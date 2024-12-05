@@ -66,7 +66,7 @@ public class EmailConfiguration extends BaseConfiguration<EmailConfiguration> {
 
     public String getVerifyEmailBody(String language) {
         try {
-            return new String(EmailConfiguration.getResource("email-" + language + ".html"));
+            return new String(EmailConfiguration.getEmailTemplate("email-" + language + ".html"));
         } catch (IOException e) {
             logger.error("Failed to read email file");
             throw new RuntimeException(e);
