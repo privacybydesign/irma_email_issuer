@@ -32,8 +32,6 @@ COPY --from=javabuild /app/build/libs/irma_email_issuer.war /usr/local/tomee/web
 COPY ./src/main/resources/email-en.html /email-templates/email-en.html
 COPY ./src/main/resources/email-nl.html /email-templates/email-nl.html
 
-# Copy the assets folder for styling the email templates
-COPY ./src/main/resources/assets /email-templates/assets
 
 RUN mkdir /usr/local/keys
 
