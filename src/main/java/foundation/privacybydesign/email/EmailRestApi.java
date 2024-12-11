@@ -85,6 +85,7 @@ public class EmailRestApi {
                     client.getReplyToEmail(),
                     true,
                     url
+                    
             );
         } catch (AddressException e) {
             logger.error("Invalid address: {}", e.getMessage());
