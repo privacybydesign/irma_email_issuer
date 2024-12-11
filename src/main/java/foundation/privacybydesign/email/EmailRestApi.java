@@ -84,6 +84,7 @@ public class EmailRestApi {
                     client.getEmail(lang),
                     client.getReplyToEmail(),
                     true,
+                    url,
                     url
             );
         } catch (AddressException e) {
