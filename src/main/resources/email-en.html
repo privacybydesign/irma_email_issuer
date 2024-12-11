@@ -64,7 +64,7 @@
     display: block;
     padding: 16px 32px;
     text-decoration: none;
-    background: #a3244a url('../img/button-primary.svg') no-repeat right;
+    background: #a3244a url("data:image/svg+xml,%%3Csvg preserveAspectRatio='none' width='100%%25' height='100%%25' viewBox='0 0 260 48' fill='none' xmlns='http://www.w3.org/2000/svg'%%3E%%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M160.129 48H186.473L207.125 0H139.5L160.129 48Z' fill='%%23BA3555'/%%3E%%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M232.187 48L252.818 0H253.83C257.144 0 259.83 2.68629 259.83 6V42C259.83 45.3137 257.144 48 253.83 48H232.187Z' fill='%%23A03352'/%%3E%%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M252.818 0H219.456V48H232.187L252.818 0Z' fill='%%2387314F'/%%3E%%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M219.455 0H207.125L186.473 48H219.455V0Z' fill='%%23A03352'/%%3E%%3C/svg%%3E") no-repeat right;
 }
 .email-footer-text {
     color: #a3244a;
@@ -100,7 +100,7 @@
     align-items: center;
 }
 
-.email-button:hover { 
+.a .email-button:hover { 
   color: white;
   text-decoration: none;
 }
@@ -114,6 +114,15 @@
         <tbody>
           <tr>
             <td>
+              <div class="email-header">
+                <a href="yivi.app" target="_blank">
+                  <img
+                    alt="Yivi banner"
+                    src="data:image/png;base64, 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"
+                    class="email-banner"
+                  />
+                </a>
+              </div>
               <h2 class="email-title">Email Confirmation</h2>
               <div class="email-text">
                 <p>Dear Yivi User,</p>
@@ -145,26 +154,19 @@
               <div class="email-footer">
                 <p>
                   <span class="icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="#a3244a">
-                      <path d="M12 2C8.1 2 5 5.1 5 9c0 3.5 3.6 6.9 6.6 9.7.2.2.4.3.6.3s.4-.1.6-.3C15.4 15.9 19 12.5 19 9c0-3.9-3.1-7-7-7zm0 11c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z" />
-                      <circle cx="12" cy="9" r="2.5" />
-                    </svg>
+                    📍
                   </span>
                   Janssoniuslaan 80 | 3528 AJ Utrecht
                 </p>
                 <p>
                   <span class="icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="#a3244a">
-                      <path d="M6.62 10.79a15.49 15.49 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.06-.24c1.12.37 2.33.57 3.53.57a1 1 0 0 1 1 1v3.22a1 1 0 0 1-1 1A17.91 17.91 0 0 1 3 4a1 1 0 0 1 1-1h3.22a1 1 0 0 1 1 1c0 1.2.2 2.41.57 3.53a1 1 0 0 1-.24 1.06l-2.2 2.2z" />
-                    </svg>
+                    📞
                   </span>
                   +31 (0)88 240 4200 
                 </p>
                 <p>
                   <span class="icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="#a3244a">
-                      <path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2v.01L12 11 4 6.01V6h16zM4 8.99L10.66 13c.36.21.77.32 1.17.32s.81-.11 1.17-.32L20 8.99V18H4V8.99z" />
-                    </svg>
+                    📧
                   </span>
                   yivi@caesar.nl
                 </p>
