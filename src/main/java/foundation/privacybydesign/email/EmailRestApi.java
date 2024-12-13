@@ -8,8 +8,8 @@ import org.irmacard.credentials.info.CredentialIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import foundation.privacybydesign.email.ratelimit.MemoryRateLimit;
 import foundation.privacybydesign.email.ratelimit.RateLimit;
+import foundation.privacybydesign.email.ratelimit.RateLimitUtils;
 import jakarta.mail.internet.AddressException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -28,7 +28,7 @@ import java.util.HashMap;
 @Path("")
 public class EmailRestApi {
     private static Logger logger = LoggerFactory.getLogger(EmailRestApi.class);
-    private static RateLimit rateLimiter = MemoryRateLimit.getInstance();
+    private static RateLimit rateLimiter = RateLimitUtils.getRateLimiter();
 
     private static final String ERR_ADDRESS_MALFORMED = "error:email-address-malformed";
     private static final String ERR_INVALID_TOKEN = "error:invalid-token";
@@ -84,6 +84,7 @@ public class EmailRestApi {
                     client.getEmail(lang),
                     client.getReplyToEmail(),
                     true,
+                    url,
                     url
             );
         } catch (AddressException e) {
