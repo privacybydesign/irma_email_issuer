@@ -17,6 +17,19 @@ $ utils/keygen.sh ./src/main/resources/sk ./src/main/resources/pk
 2. Create the Java app configuration:
 Copy the file `src/main/resources/config.sample.json` to `src/main/resources/config.json`.
 
+#### Redis
+For Redis the following environment variables need to be set:
+
+|Name | Description |
+|---|---|
+| REDIS_HOST | Host to reach the redis at |
+| REDIS_PORT | Port to reach the redis at |
+| REDIS_MASTER_NAME | The master name for the Redis Sentinel |
+| REDIS_USERNAME | Username for the Redis user |
+| REDIS_PASSWORD | The password for the Redis user |
+| REDIS_KEY_PREFIX | The prefix to use for all redis keys |
+| STORAGE_TYPE | The type of storage used: if you want to enable Redis, set it to "redis" |
+
 ### Run
 Use docker-compose up combined with your localhost IP address as environment variable to spin up the containers:
 ```bash
