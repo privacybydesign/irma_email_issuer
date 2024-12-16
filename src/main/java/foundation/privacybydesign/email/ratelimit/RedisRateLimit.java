@@ -19,6 +19,8 @@ class RedisRateLimit extends RateLimit {
 
     private static Logger LOG = LoggerFactory.getLogger(RedisRateLimit.class);
     final private static String NAMESPACE = "rate-limit";
+    final private static String TIMESTAMP_FIELD_NAME = "timestamp";
+    final private static String TRIES_FIELD_NAME = "tries";
 
     private static RedisRateLimit instance;
 
@@ -93,7 +95,7 @@ class RedisRateLimit extends RateLimit {
         try (var jedis = pool.getResource()) {
             Limit limit = limitFromRedis(jedis, key);
             if (limit == null) {
-                return;
+                throw new IllegalStateException("limit is null where that should be impossible");
             }
             if (nextTry > now) {
                 throw new IllegalStateException("counting rate limit while over the limit");
@@ -111,6 +113,8 @@ class RedisRateLimit extends RateLimit {
         }
     }
 
+    // TODO: This is not the idiomatic way to delete expired items in Redis,
+    // use the built in `expire` command instead
     @Override
     public void periodicCleanup() {
         long now = System.currentTimeMillis();
@@ -138,14 +142,51 @@ class RedisRateLimit extends RateLimit {
     void limitToRedis(Jedis jedis, String key, Limit limit) {
         final String ts = Long.toString(limit.timestamp);
         final String tries = Long.toString(limit.tries);
-        jedis.hset(key, "timestamp", ts);
-        jedis.hset(key, "tries", tries);
+
+        jedis.watch(key);
+        Transaction transaction = jedis.multi();
+
+        transaction.hset(key, TIMESTAMP_FIELD_NAME, ts);
+        transaction.hset(key, TRIES_FIELD_NAME, tries);
+
+        final List<Object> results = transaction.exec();
+
+        if (results == null) {
+            LOG.error("failed to set limit to Redis: exec() returned null");
+            return;
+        }
+        
+        for (var r : results) {
+            if (r instanceof Exception) {
+                LOG.error("failed to set limit to Redis: " + ((Exception) r).getMessage());
+            }
+        }
     }
 
     Limit limitFromRedis(Jedis jedis, String key) {
         try {
-            final long ts = Long.parseLong(jedis.hget(key, "timestamp"));
-            final int tries = Integer.parseInt(jedis.hget(key, "tries"));
+            jedis.watch(key);
+            Transaction transaction = jedis.multi();
+
+            final Response<String> timestampRes = transaction.hget(key, TIMESTAMP_FIELD_NAME);
+            final Response<String> triesRes = transaction.hget(key, TRIES_FIELD_NAME);
+
+            final List<Object> results = transaction.exec();
+
+            if (results == null) {
+                LOG.error("failed to get limit from Redis: exec() returned null");
+                return null;
+            }
+
+            for (var r : results) {
+                if (r instanceof Exception) {
+                    LOG.error("failed to get limit from Redis: " + ((Exception) r).getMessage());
+                    return null;
+                }
+            }
+
+            final long ts = Long.parseLong(timestampRes.get());
+            final int tries = Integer.parseInt(triesRes.get());
             return new Limit(ts, tries);
         } catch (NumberFormatException e) {
             LOG.error("failed to parse int: " + e.getMessage());
