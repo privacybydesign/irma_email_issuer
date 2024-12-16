@@ -31,4 +31,20 @@ public abstract class RateLimit {
 
     protected abstract long nextTryEmail(String email, long now);
     protected abstract void countEmail(String email, long now);
+    public abstract void periodicCleanup();
+}
+
+class Limit {
+    long timestamp;
+    int tries;
+
+    Limit(long timestamp, int tries) {
+        this.timestamp = timestamp;
+        this.tries = tries;
+    }
+
+    Limit(long now) {
+        tries = 0;
+        timestamp = now;
+    }
 }

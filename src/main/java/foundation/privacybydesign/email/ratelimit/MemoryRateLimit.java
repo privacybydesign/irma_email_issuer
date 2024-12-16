@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * How it works:
  * How much budget a user has, is expressed in a timestamp. The timestamp is
- * initially some period in the past, but with every usage (countEmail) 
+ * initially some period in the past, but with every usage (countEmail)
  * this timestamp is incremented. For e-mail addresses this
  * amount is exponential.
  *
@@ -89,34 +89,26 @@ public class MemoryRateLimit extends RateLimit {
         if (nextTry > now) {
             throw new IllegalStateException("counting rate limit while over the limit");
         }
-        limit.tries = Math.min(limit.tries+1, 6); // add 1, max at 6
+        limit.tries = Math.min(limit.tries + 1, 6); // add 1, max at 6
         // If the last usage was e.g. ≥2 days ago, we should allow them 2
         // extra tries this day.
-        long lastTryDaysAgo = (now-limit.timestamp)/DAY;
+        long lastTryDaysAgo = (now - limit.timestamp) / DAY;
         long bonusTries = limit.tries - lastTryDaysAgo;
         if (bonusTries >= 1) {
-            limit.tries = (int)bonusTries;
+            limit.tries = (int) bonusTries;
         }
         limit.timestamp = now;
     }
 
+    @Override
     public void periodicCleanup() {
         long now = System.currentTimeMillis();
-        // Use enhanced for loop, because an iterator makes sure concurrency issues cannot occur.
+        // Use enhanced for loop, because an iterator makes sure concurrency issues
+        // cannot occur.
         for (Map.Entry<String, Limit> entry : emailLimits.entrySet()) {
-            if (entry.getValue().timestamp < now - 2*DAY) {
+            if (entry.getValue().timestamp < now - 2 * DAY) {
                 emailLimits.remove(entry.getKey());
             }
         }
-    }
-}
-
-class Limit {
-    long timestamp;
-    int tries;
-
-    Limit(long now) {
-        tries = 0;
-        timestamp = now;
     }
 }
