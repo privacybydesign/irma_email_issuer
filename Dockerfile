@@ -48,5 +48,4 @@ ENV IRMA_CONF="/irma-config/"
 ENV EMAIL_TEMPLATE_DIR="/email-templates/"
 EXPOSE 8080
 
-# Copy the config file to the webapp. This is done at runtime so that the config file can be mounted as a volume.
 CMD [ "/bin/sh", "-C", "./start.sh" ]
