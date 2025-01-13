@@ -6,8 +6,7 @@ set -e # exit the script immediately when an error is encountered
 # in some cases secrets from different places might be required to be used together
 # so this provides the option to provide a config template with some environment variables
 echo "creating config.json based on template"
-envsubst < /config/config.json > /tmp/conf.json
-cp /tmp/conf.json $IRMA_CONF/config.json
+envsubst < /config/config.json > $IRMA_CONF/config.json
 
 echo "generating binary file for private key"
 openssl rsa -in /irma-jwt-key/priv.pem -outform der -out /usr/local/keys/priv.der
