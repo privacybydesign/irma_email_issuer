@@ -18,4 +18,3 @@ src/main/webapp/*
 !src/main/webapp/WEB-INF/
 
 .idea/
-.vscode/
