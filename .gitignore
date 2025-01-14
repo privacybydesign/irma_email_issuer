@@ -19,3 +19,4 @@ src/main/webapp/*
 
 .idea/
 .vscode
+.secrets

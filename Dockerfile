@@ -14,7 +14,7 @@ RUN cp /webapp/redirect-en.html /www/index.html
 
 # --------------------------------------------------------
 
-FROM gradle:7.6-jdk11 AS javabuild
+FROM gradle:7.6-jdk17 AS javabuild
 
 # Build the java app
 COPY ./ /app/
@@ -23,7 +23,7 @@ RUN gradle build
 
 # --------------------------------------------------------
 
-FROM tomee:9.1-jre11
+FROM tomee:10.0.0-jre17
 RUN apt-get update && apt-get install gettext-base
 
 WORKDIR /server
