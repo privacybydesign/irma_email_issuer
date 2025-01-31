@@ -19,13 +19,13 @@ function init() {
         $('#email-form input').prop('disabled', false);
     }
 }
+const appNavigationHistory = []; // Track in-app navigation
 
 function setWindow(window, back) {
     $('[id^=window-]').addClass('hidden');
-    $('#window-'+window).removeClass('hidden');
+    $('#window-' + window).removeClass('hidden');
 
-    // Put h1 in header when not being on mobile
-    const h1 = $('#window-'+window + ' h1');
+    const h1 = $('#window-' + window + ' h1');
     if (isInApp) {
         $('header').hide();
         h1.show();
@@ -33,15 +33,32 @@ function setWindow(window, back) {
         $('header').html(h1.clone().show()).show();
         h1.hide();
     }
+
     const backButton = $('#back-button');
     backButton.off();
+
+    // Only add to history if it's a new navigation
     if (back) {
+        if (appNavigationHistory.length === 0 || appNavigationHistory[appNavigationHistory.length - 1] !== window) {
+            appNavigationHistory.push(window);
+        }
+
         backButton
-          .click(() => {clearStatus(); setWindow(back); return false;})
+          .click(() => {
+              clearStatus();
+              setWindow(back);
+              return false;
+          })
           .removeClass('button-hidden');
-    } else if (history.length > 1) {
+    } else if (appNavigationHistory.length > 1) {
+        // Navigate back within the app
         backButton
-          .click(() => {clearStatus(); history.back(); return false;})
+          .click(() => {
+              clearStatus();
+              appNavigationHistory.pop();
+              setWindow(appNavigationHistory[appNavigationHistory.length - 1]);
+              return false;
+          })
           .removeClass('button-hidden');
     } else {
         backButton.addClass('button-hidden');
@@ -56,6 +73,7 @@ function setWindow(window, back) {
         submitButton.addClass('hidden');
     }
 }
+
 
 function addEmail(e) {
     const address = $('#email-form [id=email]').val().toLowerCase();
