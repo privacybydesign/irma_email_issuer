@@ -6,7 +6,7 @@
     <meta name="supported-color-schemes" content="light dark"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-      /* Base styles for body */
+      /* Base styles */
       body {
         margin: 0;
         padding: 0;
@@ -17,153 +17,134 @@
         color: black;
       }
 
-      
+      .main {
+        width: 600px;
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .header, .title, .body-text, .footer-text, .alt-link {
+        padding: 16px 24px;
+        text-align: left;
+      }
+
+      .header img {
+        float: left;
+      }
+
+      .title {
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .body-text p {
+        margin: 0 0 10px 0;
+        font-size: 18px;
+      }
+
+      .button-container {
+        text-align: center;
+      }
+
+      .button {
+        display: inline-block;
+        background: #a3244a;
+        border: 15px solid #a3244a;
+        font-weight: 700;
+        letter-spacing: 2px;
+        font-size: 16px;
+        line-height: 25px;
+        text-decoration: none;
+        border-radius: 6px;
+        color: #ffffff !important;
+      }
+
+      .alt-link {
+        font-size: 18px;
+        color: black !important;
+      }
+
+      .divider {
+        border-top: 2px solid #9b9597;
+        line-height: 1px; 
+        font-size: 1px;
+      }
+
       /* Dark mode support */
       @media (prefers-color-scheme: dark) {
         body {
           background-color: black !important;
           color: #ffffff !important;
         }
-        table {
+        .main {
           background-color: black !important;
         }
         a {
           color: lightskyblue!important;
         }
-        td {
+        .alt-link {
           color: #ffffff !important;
-        }
-        span.im {
-          color:#ffffff !important
         }
       }
     </style>
   </head>
   <body>
-    <!-- Outer table to center content -->
-    <table align="center" width="100%%" cellpadding="0" cellspacing="0" role="presentation" style="background-color: #ffffff;">
+    <table align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
         <td align="center">
-          
-          <!-- Main content table -->
-          <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border: 1px solid #ddd; border-radius: 4px; overflow: hidden;">
-            
-            <!-- Header -->
+          <table class="main">
             <tr>
-              <td>
-                <table width="100%%">
+              <td class="header">
+                <img src="https://yivi-cdn.s3.nl-ams.scw.cloud/header.png" />
+              </td>
+            </tr>
+            <tr>
+              <td class="title">Email Confirmation</td>
+            </tr>
+            <tr>
+              <td class="body-text">
+                <p>Dear Yivi User,</p>
+                <p>
+                  Thanks for using Yivi, your privacy-friendly identity wallet!<br />
+                  Click the button below to verify and add your email address to your Yivi app.
+                  The verification link will be valid for 24 hours.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="button-container">
+                <a href="%1$s" class="button">Verify your email</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="alt-link">
+                <p>If the button doesn&#39;t work, you can also verify your email by using the link below:</p>
+                <p><a href="%1$s">%1$s</a></p>
+              </td>
+            </tr>
+            <tr>
+              <td class="body-text">
+                Didn&#39;t request this?<br />
+                Ignore this email or contact us.
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="padding: 0 20px;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
                   <tr>
-                    <td style="padding: 16px 24px; text-align: center;">
-                      <img src="https://yivi-cdn.s3.nl-ams.scw.cloud/header.png" />
-                    </td>
+                    <td class="divider">&nbsp;</td>
                   </tr>
                 </table>
               </td>
             </tr>
-            
-            <!-- Title -->
             <tr>
-              <td>
-                <table width="100%%">
-                  <tr>
-                    <td style="padding: 16px 24px; font-size: 24px; font-weight: bold; text-align: left;">
-                      Email Confirmation
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            
-            <!-- Email body -->
-            <tr>
-              <td>
-                <table width="100%%">
-                  <tr>
-                    <td style="padding: 16px 24px; font-size: 18px; text-align: left;">
-                      <p>Dear Yivi User,</p>
-                      <p>
-                        Thanks for using Yivi, your privacy-friendly identity wallet!<br />
-                        Click the button below to verify and add your email address to your Yivi app.
-                        The verification link will be valid for 24 hours.
-                      </p>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            
-            <tr>
-              <td align="center">
-                <table width="50%%">
-                  <tr>
-                     <td style="border-radius: 8px; background: #a3244a; text-align: center;">
-                        <a href="%1$s" style="background: #a3244a; border: 15px solid #a3244a;font-family: 'Roboto', 'Open Sans', 'Arial', sans-serif; font-weight: 700; letter-spacing: 2px; font-size: 16px; mso-height-rule: exactly; line-height: 25px; text-align: center; text-decoration: none; display: block; border-radius: 6px; font-weight: 700;">
-                            &nbsp;&nbsp;&nbsp;<span style="color:#ffffff !important">Verify your email</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                        </a>
-                    </td>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            
-            
-            <!-- Alternate verification link -->
-            <tr>
-              <td>
-                <table width="100%%">
-                  <tr>
-                    <td style="padding: 16px 24px 0px 24px; font-size: 18px; text-align: left; color: black !important;">
-                      If the button doesn&#39;t work, you can also verify your email by using the link below:<br />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 0px 16px 0px 24px; font-size: 18px; text-align: left;">
-                      <a href="%1$s" style="color:blue underline;">%1$s</a>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            
-            <tr>
-              <td>
-                <table width="100%%">
-                  <tr>
-                    <td style="padding: 16px 24px; font-size: 18px; text-align: left;">
-                      Didn&#39;t request this?<br />
-                      Ignore this email or contact us.
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            
-            <!-- Divider line -->
-            <tr>
-              <td style="padding-left: 24px; padding-right: 24px;">
-                <table width="100%%">
-                  <tr>
-                    <td style="border-top: 2px solid #9b9597;"></td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            
-            <!-- Footer -->
-            <tr>
-              <td>
-                <table width="100%%">
-                  <tr>
-                    <td style="padding: 16px 24px; font-size: 16px; text-align: left;">
-                      Sent to you from Yivi, join our <a href="https://github.com/privacybydesign">Github community</a>.
-                    </td>
-                  </tr>
-                </table>
+              <td class="footer-text">
+                Sent to you from Yivi, join our <a href="https://github.com/privacybydesign">Github community</a>.
               </td>
             </tr>
           </table>
-          
         </td>
       </tr>
     </table>
