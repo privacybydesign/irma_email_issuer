@@ -14,11 +14,9 @@
         font-family: 'Roboto', 'Open Sans', 'Arial', sans-serif;
         font-size: 16px;
         line-height: 1.5;
-        color: #000000;
+        color: black;
       }
-      span.im {
-        color:#000000 !important
-      }
+
       
       /* Dark mode support */
       @media (prefers-color-scheme: dark) {
@@ -36,7 +34,7 @@
           color: #ffffff !important;
         }
         span.im {
-          color:#ffffff
+          color:#ffffff !important
         }
       }
     </style>
@@ -127,8 +125,10 @@
               <td>
                 <table width="100%%">
                   <tr>
-                    <td style="padding: 16px 24px; font-size: 18px; text-align: left;">
+                    <td style="padding: 16px 24px; font-size: 18px; text-align: left; color: #000000 !important;">
                       If the button doesn&#39;t work, you can also verify your email by using the link below:<br />
+                    </td>
+                    <td>
                       <a href="%1$s" style="color:blue underline;">%1$s</a>
                     </td>
                   </tr>
