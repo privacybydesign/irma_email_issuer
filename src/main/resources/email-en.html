@@ -64,6 +64,9 @@
       .alt-link {
         font-size: 18px;
         color: black !important;
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-bottom: 0px;
       }
 
       .divider {
@@ -118,14 +121,18 @@
                 <a href="%1$s" class="button">Verify your email</a>
               </td>
             </tr>
-          <table class="main">
             <tr>
-              <td class="alt-link">
-                <p>If the button doesn&#39;t work, you can also verify your email by using the link below:</p>
-                <p><a href="%1$s">%1$s</a></p>
+              <td align="left" style="padding: 16px 24px;">
+                <table role="presentation" width="100%%" cellspacing="0" cellpadding="0" border="0">
+                  <tr>
+                    <td class="alt-link">
+                      <p>If the button doesn&#39;t work, you can also verify your email by using the link below:</p>
+                      <p><a href="%1$s" style="word-break: break-all; color: black !important;">%1$s</a></p>
+                    </td>
+                  </tr>
+                </table>
               </td>
-            </tr>
-          </table>
+            </tr>            
             <tr>
               <td class="body-text">
                 Didn&#39;t request this?<br />
