@@ -35,14 +35,16 @@ function setWindow(window, back) {
     }
     const backButton = $('#back-button');
     backButton.off();
-    if (back) {
+
+    // Only show back button when on email-confirm window
+    if (window === 'email-confirm') {
         backButton
-          .click(() => {clearStatus(); setWindow(back); return false;})
-          .removeClass('button-hidden');
-    } else if (history.length > 1) {
-        backButton
-          .click(() => {clearStatus(); history.back(); return false;})
-          .removeClass('button-hidden');
+            .click(() => {
+                clearStatus();
+                setWindow('email-add');
+                return false;
+            })
+            .removeClass('button-hidden');
     } else {
         backButton.addClass('button-hidden');
     }

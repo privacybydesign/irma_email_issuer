@@ -2,9 +2,11 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <meta name="color-scheme" content="light dark"> 
+    <meta name="supported-color-schemes" content="light dark"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-      /* Base styles for body */
+      /* Base styles */
       body {
         margin: 0;
         padding: 0;
@@ -12,158 +14,163 @@
         font-family: 'Roboto', 'Open Sans', 'Arial', sans-serif;
         font-size: 16px;
         line-height: 1.5;
-        color: #b9113d;
+        color: #000000;
       }
-      
+
+      .main {
+        width: 600px;
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .header, .title, .body-text, .footer-text, .alt-link {
+        padding: 16px 24px;
+        text-align: left;
+      }
+
+      .header img {
+        float: left;
+      }
+
+      .title {
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .body-text p {
+        margin: 0 0 10px 0;
+        font-size: 18px;
+      }
+
+      .button-container {
+        text-align: center;
+      }
+
+      .button {
+        display: inline-block;
+        background: #a3244a;
+        border: 20px solid #a3244a;
+        font-weight: 700;
+        letter-spacing: 2px;
+        font-size: 16px;
+        line-height: 25px;
+        text-decoration: none;
+        border-radius: 6px;
+        color: #ffffff !important;
+      }
+
+      a:visited.button {
+        color: #ffffff !important;
+      }
+
+      .alt-link {
+        font-size: 18px;
+        color: #000000 !important;
+        text-align: left;
+        padding-left: 16px;
+        padding-right: 24px;
+        padding-bottom: 0px;
+      }
+
+      .divider {
+        border-top: 2px solid #9b9597;
+        line-height: 1px; 
+        font-size: 1px;
+      }
+
       /* Dark mode support */
       @media (prefers-color-scheme: dark) {
         body {
-          background-color: black !important;
+          background-color: #000000 !important;
           color: #ffffff !important;
         }
-        table {
-          background-color: black !important;
+        .main {
+          background-color: #000000 !important;
         }
         a {
           color: lightskyblue!important;
         }
-        td {
+        .alt-link {
           color: #ffffff !important;
         }
+        a.button {
+          color: #ffffff !important;
+        }
+        a:visited.button {
+        color: #ffffff !important;
       }
+      }
+      
     </style>
   </head>
   <body>
-    <!-- Outer table to center content -->
-    <table align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background-color: #ffffff;">
+    <table align="center" width="100%%" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
         <td align="center">
-          
-          <!-- Main content table  -->
-          <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border: 1px solid #ddd; border-radius: 4px; overflow: hidden;">
-            
-            <!-- Header -->
-            <tr>
-              <td>
-                <table width="100%">
-                  <tr>
-                    <td style="padding: 16px 24px; text-align: left;">
-                      <img src="https://yivi-cdn.s3.nl-ams.scw.cloud/header.png" />
-                    </td>
-                  </tr>
-                </table>
+          <table class="main">
+            <tr align="center">
+              <td class="header">
+                <img src="https://yivi-cdn.s3.nl-ams.scw.cloud/header.png" />
               </td>
             </tr>
-            
-            <!-- Title -->
             <tr>
-              <td>
-                <table width="100%">
-                  <tr>
-                    <td style="padding: 16px 24px; font-size: 24px; font-weight: bold; color: #a3244a; text-align: left;">
-                      E-mailbevestiging
-                    </td>
-                  </tr>
-                </table>
+              <td class="title">E-mailbevestiging</td>
+            </tr>
+            <tr>
+              <td class="body-text">
+                <p>Beste Yivi-gebruiker,,</p>
+                <p>
+                    Bedankt voor het gebruiken van Yivi, jouw privacyvriendelijke identity wallet!<br />
+                    Klik op de knop hieronder om je e-mailadres te verifi&euml;ren en toe te voegen aan jouw Yivi-app.
+                    De verificatielink is 24 uur geldig.
+                </p>
               </td>
             </tr>
-            
-            <!-- Email body -->
             <tr>
-              <td>
-                <table width="100%">
-                  <tr>
-                    <td style="padding: 16px 24px; font-size: 18px; color: #a3244a; text-align: left;">
-                      <p>Beste Yivi-gebruiker,</p>
-                      <p>
-                        Bedankt voor het gebruiken van Yivi, jouw privacyvriendelijke identity wallet!<br />
-                        Klik op de knop hieronder om je e-mailadres te verifiëren en toe te voegen aan jouw Yivi-app.
-                        De verificatielink is 24 uur geldig.
-                      </p>
-                    </td>
-                  </tr>
-                </table>
+              <td class="button-container">
+                <a href="%1$s" class="button">Verifieer je e-mailadres</a>
               </td>
             </tr>
-            
-            <!-- Button -->
+
             <tr>
               <td>
-                <table width="100%">
+                <table width="100%%">
                   <tr>
-                    <td align="center" style="padding: 16px 24px;">
-                      <a href="%1$s" 
-                         style="
-                            color: #ffffff !important;
-                            font-size: 16px;
-                            font-family: 'Roboto', 'Open Sans', 'Arial', sans-serif;
-                            font-weight: bold;
-                            background-color: #a3244a;
-                            border-radius: 4px;
-                            display: block;
-                            padding: 16px 32px;
-                            text-decoration: none;
-                            background: #a3244a url('https://yivi-cdn.s3.nl-ams.scw.cloud/button-primary.svg') no-repeat right;">
-                        Verifieer je e-mailadres
-                      </a>
+                    <td class="alt-link">
+                        Werkt deze knop niet? Gebruik dan de onderstaande link om je e-mailadres te verifi&euml;ren:<br />
                     </td>
                   </tr>
-                </table>
-              </td>
-            </tr>
-            
-            <!-- Alternate verification link -->
-            <tr>
-              <td>
-                <table width="100%">
                   <tr>
-                    <td style="padding: 16px 24px; font-size: 18px; color: #a3244a ; text-align: left;">
-                      Werkt deze knop niet? Gebruik dan de onderstaande link om je e-mailadres te verifiëren:<br />
+                    <td style="padding: 0px 24px 0px 16px; font-size: 18px; text-align: left;">
                       <a href="%1$s" style="color:blue underline;">%1$s</a>
                     </td>
                   </tr>
                 </table>
               </td>
-            </tr>
-            
+            </tr>            
             <tr>
-              <td>
-                <table width="100%">
+              <td class="body-text">
+                Heb jij dit niet aangevraagd?<br />
+                Negeer deze e-mail of neem contact met ons op.
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="padding: 0 20px;">
+                <table width="100%%" border="0" cellspacing="0" cellpadding="0" role="presentation">
                   <tr>
-                    <td style="padding: 16px 24px; font-size: 18px; color: #a3244a; text-align: left;">
-                      Heb jij dit niet aangevraagd?<br />
-                      Negeer deze e-mail of neem contact met ons op.
-                    </td>
+                    <td class="divider">&nbsp;</td>
                   </tr>
                 </table>
               </td>
             </tr>
-            
-            <!-- Divider line -->
             <tr>
-              <td>
-                <table width="100%">
-                  <tr>
-                    <td style="padding: 0; border-top: 3px solid #8b173a;"></td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            
-            <!-- Footer -->
-            <tr>
-              <td>
-                <table width="100%">
-                  <tr>
-                    <td style="padding: 16px 24px; font-size: 16px; color: #a3244a; text-align: left;">
-                      Verzonden door Yivi, sluit je aan bij onze <a href="https://github.com/privacybydesign">GitHub-community</a>.
-                    </td>
-                  </tr>
-                </table>
-              </td>
+              <td class="footer-text">
+                Verzonden door Yivi, sluit je aan bij onze <a href="https://github.com/privacybydesign">GitHub-community</a>.
+            </td>
             </tr>
           </table>
-          
         </td>
       </tr>
     </table>
