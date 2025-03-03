@@ -1,4 +1,3 @@
-
 FROM node:20 AS webappbuild
 
 # Build the webapp
