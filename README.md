@@ -1,3 +1,5 @@
+> :warning: **This repository has been archived and will be further developed as a Go project in [this repository](https://github.com/privacybydesign/go-email-issuer).** 
+
 
 # irma_email_issuer
 
